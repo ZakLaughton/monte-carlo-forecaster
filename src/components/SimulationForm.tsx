@@ -15,25 +15,71 @@ export const SimulationForm = ({ onRun }: Props) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label style={{ display: "block" }}>
-          Add past sprint velocity. Use the number of tickets moved to "done"
-          each week. Format: 1,3,4,3,2.
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          maxWidth: "400px",
+          margin: "0 auto",
+        }}
+      >
+        <label
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            fontWeight: "bold",
+          }}
+        >
+          Add past sprint velocity:
+          <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
+            Use the number of tickets moved to "done" each week. Format:
+            1,3,4,3,2.
+          </span>
           <input
             type="text"
             value={velocityStr}
             onChange={(e) => setVelocityStr(e.target.value)}
+            style={{
+              padding: "0.5rem",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+            }}
           />
         </label>
-        <label>
-          Project size (number of stories)
+        <label
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            fontWeight: "bold",
+          }}
+        >
+          Project size (number of stories):
           <input
             type="number"
             value={projectSize}
             onChange={(e) => setProjectSize(Number(e.target.value))}
+            style={{
+              padding: "0.5rem",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+            }}
           />
         </label>
-        <button type="submit">Run simulation</button>
+        <button
+          type="submit"
+          style={{
+            padding: "0.5rem 1rem",
+            backgroundColor: "#007BFF",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Run simulation
+        </button>
       </form>
     </>
   );

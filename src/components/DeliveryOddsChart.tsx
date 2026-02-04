@@ -31,7 +31,7 @@ function calculatePercentileData(data: { weeks: number; p: number }[]) {
 
 export function DeliveryOddsChart({ data }: Props) {
   return (
-    <div style={{ width: "100%", height: 300 }}>
+    <div style={{ width: "100%", height: 300, padding: "20px" }}>
       <ResponsiveContainer>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -57,7 +57,9 @@ export function DeliveryOddsTable({ data }: Props) {
   const percentiles = calculatePercentileData(data);
 
   return (
-    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <table
+      style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}
+    >
       <thead>
         <tr>
           <th style={{ border: "1px solid #ddd", padding: "8px" }}>
@@ -128,7 +130,7 @@ export function DeliveryOddsBarChart({ data }: Props) {
 
 export function DeliveryOddsAreaChart({ data }: Props) {
   return (
-    <div style={{ width: "100%", height: 300 }}>
+    <div style={{ width: "100%", height: 300, padding: "20px" }}>
       <ResponsiveContainer>
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
