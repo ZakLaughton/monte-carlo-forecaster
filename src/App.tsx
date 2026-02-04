@@ -8,7 +8,9 @@ function App() {
   const [velocityInput, setVelocityInput] = useState<string>("");
 
   const [projectSize, setProjectSize] = useState<number>(20);
-  const [projectSizeInput, setProjectSizeInput] = useState<number>("20");
+  const [projectSizeInput, setProjectSizeInput] = useState<number>(20);
+
+  const [simulationResults, setSimulationResults] = useState<number[]>([]);
 
   const handleSubmit = (event: React.SubmitEvent) => {
     event.preventDefault();
@@ -18,6 +20,27 @@ function App() {
       setProjectSize(parsedSize);
     }
     setPastVelocity(velocityInput.split(",").map((num) => Number(num)));
+  };
+
+  const runSimulation = () => {
+    if (pastVelocity.length === 0) return;
+
+    const simulations = [];
+
+    for (let i = 0; i < 100; i++) {
+      console.log("Running simulation number", i + 1);
+      let remainingStories = projectSize;
+      let totalWeeks = 0;
+
+      while (remainingStories > 0) {
+        totalWeeks++;
+        const completedThisWeek = pickRandomItem(pastVelocity);
+        remainingStories -= completedThisWeek;
+      }
+      simulations.push(totalWeeks);
+    }
+
+    setSimulationResults(simulations);
   };
 
   return (
@@ -45,6 +68,10 @@ function App() {
         <button type="submit">Add</button>
       </form>
 
+      <button onClick={runSimulation} style={{ marginLeft: "1rem" }}>
+        Run Simulation
+      </button>
+
       <div>
         <h3>Data</h3>
         <h4>Project size</h4>
@@ -61,9 +88,21 @@ function App() {
             ))}
           </ul>
         )}
+        <h4>Simulation</h4>
+        {simulationResults}
       </div>
     </div>
   );
+}
+
+/**
+ * Picks a random element from an array.
+ * @param arr The array to pick from.
+ * @returns A random element from the array, or undefined if the array is empty.
+ */
+function pickRandomItem<T>(arr: T[]): T {
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
 }
 
 export default App;
