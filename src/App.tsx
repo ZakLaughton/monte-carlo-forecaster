@@ -27,7 +27,7 @@ function App() {
 
     const simulations = [];
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10000; i++) {
       let remainingStories = projectSize;
       let totalWeeks = 0;
 
@@ -88,7 +88,7 @@ function App() {
           </ul>
         )}
         <h4>Simulation</h4>
-        {simulationResults}
+        {simulationResults.join(", ")}
       </div>
     </div>
   );
