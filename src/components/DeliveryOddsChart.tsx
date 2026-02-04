@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { BarChart, Bar } from "recharts";
 import { LabelList } from "recharts";
+import { AreaChart, Area } from "recharts";
 
 type Props = {
   data: { weeks: number; p: number; count: number }[];
@@ -120,6 +121,30 @@ export function DeliveryOddsBarChart({ data }: Props) {
             <LabelList dataKey="count" position="top" />
           </Bar>
         </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+export function DeliveryOddsAreaChart({ data }: Props) {
+  return (
+    <div style={{ width: "100%", height: 300 }}>
+      <ResponsiveContainer>
+        <AreaChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="weeks" />
+          <YAxis
+            domain={[0, 1]}
+            tickFormatter={(v) => `${Math.round(v * 100)}%`}
+          />
+          <Tooltip
+            formatter={(value?: number) =>
+              value == null ? "" : `${(value * 100).toFixed(1)}%`
+            }
+            labelFormatter={(label) => `By week ${label}`}
+          />
+          <Area type="monotone" dataKey="p" stroke="#8884d8" fill="#8884d8" />
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );
