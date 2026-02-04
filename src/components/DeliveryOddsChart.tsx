@@ -1,28 +1,36 @@
 import {
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 
-const demo = [
-  { weeks: 1, p: 0.1 },
-  { weeks: 2, p: 0.2 },
-  { weeks: 3, p: 0.7 },
-];
+type Props = {
+  data: { weeks: number; p: number }[];
+};
 
-export function DeliveryOddsChart() {
+export function DeliveryOddsChart({ data }: Props) {
   return (
     <div style={{ width: "100%", height: 300 }}>
       <ResponsiveContainer>
-        <BarChart data={demo}>
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="weeks" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="p" />
-        </BarChart>
+          <YAxis
+            domain={[0, 1]}
+            tickFormatter={(v) => `${Math.round(v * 100)}%`}
+          />
+          <Tooltip
+            formatter={(value?: number) =>
+              value == null ? "" : `${(value * 100).toFixed(1)}%`
+            }
+            labelFormatter={(label) => `By week ${label}`}
+          />
+          <Line type="monotone" dataKey="p" strokeWidth={2} dot={false} />
+        </LineChart>
       </ResponsiveContainer>
     </div>
   );
