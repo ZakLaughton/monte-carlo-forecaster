@@ -3,7 +3,6 @@ import "./App.css";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { ForecastResults } from "./components/ForecastResults";
-import { DeliveryOddsChart } from "./components/DeliveryOddsChart";
 import { toOddsByWeek } from "./utils/stats";
 import { DeliveryOddsTable } from "./components/DeliveryOddsChart";
 import { DeliveryOddsBarChart } from "./components/DeliveryOddsChart";
