@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const SimulationForm = ({ onRun }: Props) => {
-  const [velocityStr, setVelocityStr] = useState("3,5,2,4");
+  const [velocityStr, setVelocityStr] = useState("3,5,2,4,5,4,3");
   const [projectSize, setProjectSize] = useState(20);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
