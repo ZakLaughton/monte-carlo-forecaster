@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import { SimulationForm } from "./components/simulation-form";
+import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
-import { ForecastResults } from "./components/forecast-results";
+import { ForecastResults } from "./components/ForecastResults";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
