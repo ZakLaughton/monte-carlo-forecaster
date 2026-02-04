@@ -45,7 +45,7 @@ function App() {
 
   return (
     <div>
-      <h1>Forecasting tool</h1>
+      <h1>Data-Driven Sprint Forecaster</h1>
 
       <form onSubmit={handleSubmit}>
         <label style={{ display: "block" }}>
