@@ -8,7 +8,10 @@ export const simulateDeliveryWeeks = ({
   velocityHistory,
   projectSize,
   iterationCount = 10000,
-}: SimulateDeliveryWeeksProps) => {
+}: SimulateDeliveryWeeksProps): number[] => {
+  if (projectSize <= 0) return [];
+  if (velocityHistory.length === 0) return [];
+
   const results: number[] = [];
 
   for (let i = 0; i < iterationCount; i++) {
