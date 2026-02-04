@@ -5,6 +5,7 @@ import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { ForecastResults } from "./components/ForecastResults";
 import { DeliveryOddsChart } from "./components/DeliveryOddsChart";
 import { toOddsByWeek } from "./utils/stats";
+import { DeliveryOddsTable } from "./components/DeliveryOddsChart";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -28,7 +29,12 @@ function App() {
     <div>
       <h1>Data-Driven Sprint Forecaster</h1>
       <SimulationForm onRun={runSimulation} />
-      {oddsByWeek.length > 0 && <DeliveryOddsChart data={oddsByWeek} />}
+      {oddsByWeek.length > 0 && (
+        <>
+          <DeliveryOddsTable data={oddsByWeek} />
+          <DeliveryOddsChart data={oddsByWeek} />
+        </>
+      )}
       <ForecastResults data={simulationResults} />
     </div>
   );
