@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { SimulationForm } from "./components/simulation-form";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
+import { ForecastResults } from "./components/forecast-results";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -21,11 +22,7 @@ function App() {
       <h1>Data-Driven Sprint Forecaster</h1>
       <SimulationForm onRun={runSimulation} />
 
-      <div>
-        <h3>Data</h3>
-        <h4>Simulation</h4>
-        {simulationResults.join(", ")}
-      </div>
+      <ForecastResults data={simulationResults} />
     </div>
   );
 }
