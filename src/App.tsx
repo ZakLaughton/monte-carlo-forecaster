@@ -28,7 +28,6 @@ function App() {
     const simulations = [];
 
     for (let i = 0; i < 100; i++) {
-      console.log("Running simulation number", i + 1);
       let remainingStories = projectSize;
       let totalWeeks = 0;
 
