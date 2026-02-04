@@ -4,6 +4,17 @@ export type OddsByWeekPoint = {
   count: number; // cumulative count (optional but handy)
 };
 
+/**
+ * Converts an array of simulation results (number of weeks) into an array of cumulative odds.
+ * Each result represents the number of weeks it took to complete a task in a simulation.
+ * The function calculates the probability of completion by each week, along with cumulative counts.
+ *
+ * @param results - An array of numbers where each number represents the weeks taken in a simulation.
+ * @returns An array of objects, each containing:
+ *   - `weeks`: The week number.
+ *   - `p`: The cumulative probability of completion by this week (0 to 1).
+ *   - `count`: The cumulative count of simulations completed by this week.
+ */
 export function toOddsByWeek(results: number[]): OddsByWeekPoint[] {
   if (results.length === 0) return [];
 
