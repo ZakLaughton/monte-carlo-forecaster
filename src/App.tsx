@@ -3,6 +3,7 @@ import "./App.css";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { ForecastResults } from "./components/ForecastResults";
+import { DeliveryOddsChart } from "./components/DeliveryOddsChart";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -21,8 +22,8 @@ function App() {
     <div>
       <h1>Data-Driven Sprint Forecaster</h1>
       <SimulationForm onRun={runSimulation} />
-
       <ForecastResults data={simulationResults} />
+      <DeliveryOddsChart />
     </div>
   );
 }
