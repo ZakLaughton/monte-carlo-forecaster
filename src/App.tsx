@@ -6,6 +6,7 @@ import { ForecastResults } from "./components/ForecastResults";
 import { DeliveryOddsChart } from "./components/DeliveryOddsChart";
 import { toOddsByWeek } from "./utils/stats";
 import { DeliveryOddsTable } from "./components/DeliveryOddsChart";
+import { DeliveryOddsBarChart } from "./components/DeliveryOddsChart";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -32,7 +33,7 @@ function App() {
       {oddsByWeek.length > 0 && (
         <>
           <DeliveryOddsTable data={oddsByWeek} />
-          <DeliveryOddsChart data={oddsByWeek} />
+          <DeliveryOddsBarChart data={oddsByWeek} />
         </>
       )}
       <ForecastResults data={simulationResults} />
