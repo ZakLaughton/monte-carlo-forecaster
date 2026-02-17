@@ -8,3 +8,11 @@ Tech Stack Experiments:
 • Vite + React: Exploring lightweight build tooling for fast prototyping.
 • Monte Carlo Logic: Client-side simulation of 10,000+ iterations.
 • Visualization: Rendering statistical distribution using Recharts.
+
+## Common Commands
+
+- **Start development server:** `npm run dev`
+- **Build for production:** `npm run build`
+- **Preview production build:** `npm run preview`
+- **Run ESLint:** `npm run lint`
+- **Run tests:** `npm test`
