@@ -2,6 +2,7 @@ import {
   NumberInput,
   Button,
   Stack,
+  SimpleGrid,
   Group,
   ActionIcon,
   Text,
@@ -34,29 +35,32 @@ export const SprintVelocityInput = ({ velocities, onChange }: Props) => {
         Enter the number of tickets completed in each past sprint.
       </Text>
 
-      {velocities.map((velocity, index) => (
-        <Group key={index} gap="xs" align="flex-end">
-          <NumberInput
-            label={`Sprint ${index + 1}`}
-            value={velocity}
-            onChange={(value) => handleVelocityChange(index, value)}
-            min={0}
-            w={100}
-          />
-          <ActionIcon
-            color="red"
-            variant="subtle"
-            size="lg"
-            onClick={() => removeSprint(index)}
-            disabled={velocities.length === 1}
-            aria-label={`Remove sprint ${index + 1}`}
-          >
-            ✕
-          </ActionIcon>
-        </Group>
-      ))}
+      <SimpleGrid cols={3} spacing="xs">
+        {velocities.map((velocity, index) => (
+          <Group key={index} gap={4} align="flex-end" wrap="nowrap">
+            <NumberInput
+              label={`Sprint ${index + 1}`}
+              value={velocity}
+              onChange={(value) => handleVelocityChange(index, value)}
+              min={0}
+              size="xs"
+              style={{ flex: 1 }}
+            />
+            <ActionIcon
+              color="red"
+              variant="subtle"
+              size="sm"
+              onClick={() => removeSprint(index)}
+              disabled={velocities.length === 1}
+              aria-label={`Remove sprint ${index + 1}`}
+            >
+              ✕
+            </ActionIcon>
+          </Group>
+        ))}
+      </SimpleGrid>
 
-      <Button variant="light" onClick={addSprint}>
+      <Button variant="light" size="xs" onClick={addSprint}>
         + Add Sprint
       </Button>
     </Stack>
