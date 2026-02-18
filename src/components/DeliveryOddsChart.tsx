@@ -9,9 +9,11 @@ import { BarChart, Bar } from "recharts";
 import { LabelList } from "recharts";
 import { Table, Paper, Title, Anchor } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { toCompletionDate } from "../utils/dates";
 
 type Props = {
   data: { weeks: number; p: number; count: number }[];
+  startDate?: string;
 };
 
 const DEFAULT_TARGETS = [0.5, 0.7, 0.85, 0.9, 0.95];
@@ -36,7 +38,7 @@ function calculatePercentileData(
   return percentiles;
 }
 
-export function DeliveryOddsTable({ data }: Props) {
+export function DeliveryOddsTable({ data, startDate = "" }: Props) {
   const [showFull, { toggle }] = useDisclosure(false);
   const percentiles = calculatePercentileData(
     data,
@@ -76,6 +78,14 @@ export function DeliveryOddsTable({ data }: Props) {
               <Table.Td ta="center">{row.percentile}</Table.Td>
               <Table.Td ta="center">
                 {row.weeks} {row.weeks === 1 ? "week" : "weeks"}
+                {startDate && (
+                  <>
+                    <br />
+                    <span style={{ color: "var(--mantine-color-dimmed)" }}>
+                      {toCompletionDate(startDate, row.weeks) ?? ""}
+                    </span>
+                  </>
+                )}
               </Table.Td>
             </Table.Tr>
           ))}

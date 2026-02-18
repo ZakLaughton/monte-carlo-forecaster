@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { NumberInput, Button, Stack } from "@mantine/core";
+import { NumberInput, Button, Stack, TextInput } from "@mantine/core";
 import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
 
 type Props = {
-  onRun: (velocities: number[], size: number) => void;
+  onRun: (velocities: number[], size: number, startDate: string) => void;
   isRunning?: boolean;
 };
 
@@ -12,17 +12,21 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
     3, 5, 2, 4, 5, 4, 3,
   ]);
   const [projectSize, setProjectSize] = useState<number | null>(20);
+  const [startDate, setStartDate] = useState(() =>
+    new Date().toISOString().slice(0, 10),
+  );
 
   const allWeeksValid =
     weeklyThroughput.length > 0 &&
     weeklyThroughput.every((v) => v != null && v >= 0);
   const projectSizeValid = projectSize != null && projectSize > 0;
-  const canRun = allWeeksValid && projectSizeValid;
+  const startDateValid = startDate.trim().length > 0;
+  const canRun = allWeeksValid && projectSizeValid && startDateValid;
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!canRun) return;
-    onRun(weeklyThroughput as number[], projectSize as number);
+    onRun(weeklyThroughput as number[], projectSize as number, startDate);
   };
 
   return (
@@ -42,6 +46,13 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
           allowDecimal={false}
           allowNegative={false}
           error={projectSize === null}
+        />
+        <TextInput
+          label="Forecast start date"
+          type="date"
+          value={startDate}
+          onChange={(event) => setStartDate(event.currentTarget.value)}
+          error={!startDateValid}
         />
         <Button
           type="submit"

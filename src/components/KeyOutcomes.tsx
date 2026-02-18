@@ -1,7 +1,9 @@
 import { Paper, Group, Stack, Text, Title } from "@mantine/core";
+import { toCompletionDate } from "../utils/dates";
 
 type Props = {
   data: { weeks: number; p: number }[];
+  startDate?: string;
 };
 
 function getPercentileWeeks(
@@ -22,10 +24,13 @@ function OutcomeMetric({
   label,
   sublabel,
   weeks,
+  startDate = "",
   isPlaceholder = false,
-}: Outcome & { isPlaceholder?: boolean }) {
+}: Outcome & { startDate?: string; isPlaceholder?: boolean }) {
   const weeksText =
     weeks != null ? `${weeks} ${weeks === 1 ? "week" : "weeks"}` : "— weeks";
+  const completionDate =
+    weeks != null && startDate ? toCompletionDate(startDate, weeks) : null;
 
   return (
     <Stack gap={2} align="center">
@@ -53,11 +58,14 @@ function OutcomeMetric({
       <Text c="dimmed" fz="xs">
         {sublabel}
       </Text>
+      <Text c="dimmed" fz="xs">
+        {completionDate ?? ""}
+      </Text>
     </Stack>
   );
 }
 
-export function KeyOutcomes({ data }: Props) {
+export function KeyOutcomes({ data, startDate = "" }: Props) {
   const isEmpty = data.length === 0;
   const p50 = getPercentileWeeks(data, 0.5);
   const p85 = getPercentileWeeks(data, 0.85);
@@ -88,7 +96,12 @@ export function KeyOutcomes({ data }: Props) {
       </Title>
       <Group justify="space-evenly" grow>
         {outcomes.map((o) => (
-          <OutcomeMetric key={o.label} {...o} isPlaceholder={isEmpty} />
+          <OutcomeMetric
+            key={o.label}
+            {...o}
+            startDate={startDate}
+            isPlaceholder={isEmpty}
+          />
         ))}
       </Group>
     </Paper>

@@ -10,6 +10,9 @@ const REVEAL_TRANSITION_MS = 200;
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
+  const [forecastStartDate, setForecastStartDate] = useState(() =>
+    new Date().toISOString().slice(0, 10),
+  );
   const [isRunning, setIsRunning] = useState(false);
   const [isRevealing, setIsRevealing] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -19,11 +22,12 @@ function App() {
   const busy = isRunning || isRevealing;
 
   const runSimulation = useCallback(
-    (velocities: number[], projectSize: number) => {
+    (velocities: number[], projectSize: number, startDate: string) => {
       if (timerRef.current) clearTimeout(timerRef.current);
       if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
       setIsRunning(true);
       setIsRevealing(false);
+      setForecastStartDate(startDate);
 
       const startedAt = Date.now();
 
@@ -72,6 +76,7 @@ function App() {
             <ResultsPanel
               oddsByWeek={oddsByWeek}
               simulationResults={simulationResults}
+              startDate={forecastStartDate}
               isRunning={isRunning}
               hasResults={hasResults}
             />

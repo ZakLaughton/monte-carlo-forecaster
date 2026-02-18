@@ -9,6 +9,7 @@ import type { OddsByWeekPoint } from "../utils/stats";
 type Props = {
   oddsByWeek: OddsByWeekPoint[];
   simulationResults: number[];
+  startDate: string;
   isRunning: boolean;
   hasResults: boolean;
 };
@@ -16,6 +17,7 @@ type Props = {
 export function ResultsPanel({
   oddsByWeek,
   simulationResults,
+  startDate,
   isRunning,
   hasResults,
 }: Props) {
@@ -26,12 +28,18 @@ export function ResultsPanel({
     <Stack gap="md">
       <StatusCard state={statusState} />
 
-      <Crossfade revealed={revealed} skeleton={<KeyOutcomes data={[]} />}>
-        <KeyOutcomes data={oddsByWeek} />
+      <Crossfade
+        revealed={revealed}
+        skeleton={<KeyOutcomes data={[]} startDate={startDate} />}
+      >
+        <KeyOutcomes data={oddsByWeek} startDate={startDate} />
       </Crossfade>
 
-      <Crossfade revealed={revealed} skeleton={<DeliveryOddsTable data={[]} />}>
-        <DeliveryOddsTable data={oddsByWeek} />
+      <Crossfade
+        revealed={revealed}
+        skeleton={<DeliveryOddsTable data={[]} startDate={startDate} />}
+      >
+        <DeliveryOddsTable data={oddsByWeek} startDate={startDate} />
       </Crossfade>
 
       <Crossfade revealed={revealed} skeleton={<ForecastResults data={[]} />}>
