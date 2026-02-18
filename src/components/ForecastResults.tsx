@@ -1,4 +1,4 @@
-import { Paper, Title, Text } from "@mantine/core";
+import { Paper, Text, Group } from "@mantine/core";
 
 type ForecastResultsProps = {
   data: number[];
@@ -16,23 +16,21 @@ export const ForecastResults = ({ data }: ForecastResultsProps) => {
     v != null ? `${v}${suffix}` : "—";
 
   return (
-    <Paper shadow="xs" p="md" withBorder>
-      <Title order={4} mb="sm">
-        Simulation Summary
-      </Title>
-      <Text>
-        <strong>Simulations run:</strong>{" "}
-        {fmt(data.length > 0 ? data.length : null)}
-      </Text>
-      <Text>
-        <strong>Fastest completion:</strong> {fmt(min, " weeks")}
-      </Text>
-      <Text>
-        <strong>Slowest completion:</strong> {fmt(max, " weeks")}
-      </Text>
-      <Text>
-        <strong>Median:</strong> {fmt(median, " weeks")}
-      </Text>
+    <Paper p="xs" radius="md" withBorder style={{ borderStyle: "dashed" }}>
+      <Group justify="space-between" gap="xs">
+        <Text size="xs" c="dimmed">
+          {fmt(data.length > 0 ? data.length : null)} simulations
+        </Text>
+        <Text size="xs" c="dimmed">
+          Fastest: {fmt(min, "wk")}
+        </Text>
+        <Text size="xs" c="dimmed">
+          Slowest: {fmt(max, "wk")}
+        </Text>
+        <Text size="xs" c="dimmed">
+          Median: {fmt(median, "wk")}
+        </Text>
+      </Group>
     </Paper>
   );
 };
