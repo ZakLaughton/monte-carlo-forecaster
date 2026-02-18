@@ -1,0 +1,33 @@
+/* ── Crossfade transition system ─────────────────── */
+
+.crossfade {
+  position: relative;
+}
+
+.crossfade__layer {
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.crossfade__skeleton {
+  opacity: 1;
+}
+
+.crossfade__content {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(3px);
+  pointer-events: none;
+}
+
+/* When revealed, fade skeleton out and content in */
+.crossfade--revealed .crossfade__skeleton {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.crossfade--revealed .crossfade__content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
