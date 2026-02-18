@@ -5,19 +5,25 @@ import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { toOddsByWeek } from "./utils/stats";
 import { ResultsPanel } from "./components/ResultsPanel";
 
-const MIN_RUNNING_MS = 350;
+const MIN_RUNNING_MS = 400;
+const REVEAL_TRANSITION_MS = 200;
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [isRevealing, setIsRevealing] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const revealTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const hasResults = simulationResults.length > 0;
+  const busy = isRunning || isRevealing;
 
   const runSimulation = useCallback(
     (velocities: number[], projectSize: number) => {
       if (timerRef.current) clearTimeout(timerRef.current);
+      if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
       setIsRunning(true);
+      setIsRevealing(false);
 
       const startedAt = Date.now();
 
@@ -34,6 +40,12 @@ function App() {
       timerRef.current = setTimeout(() => {
         setSimulationResults(results);
         setIsRunning(false);
+        setIsRevealing(true);
+
+        // Keep button disabled during CSS transition
+        revealTimerRef.current = setTimeout(() => {
+          setIsRevealing(false);
+        }, REVEAL_TRANSITION_MS);
       }, remaining);
     },
     [],
@@ -53,7 +65,7 @@ function App() {
         <Grid gutter="md" align="flex-start">
           <Grid.Col span={{ base: 12, md: 5 }}>
             <Paper p="md" withBorder radius="md">
-              <SimulationForm onRun={runSimulation} isRunning={isRunning} />
+              <SimulationForm onRun={runSimulation} isRunning={busy} />
             </Paper>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 7 }}>
