@@ -44,7 +44,15 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
             Completed Work Items
           </Text>
           <Tooltip
-            label="Use weeks that reflect similar team composition and work type. If the nature of work changes significantly, your forecast may not hold."
+            label={
+              <>
+                Count completed, independently shippable work items.
+                <br />
+                Be consistent in what “completed” means.
+                <br />
+                Major changes in team or work type reduce forecast reliability.
+              </>
+            }
             multiline
             w={320}
             withArrow
