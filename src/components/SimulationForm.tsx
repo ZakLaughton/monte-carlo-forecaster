@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { NumberInput, Button, Stack, TextInput, Text } from "@mantine/core";
+import {
+  NumberInput,
+  Button,
+  Stack,
+  TextInput,
+  Text,
+  Alert,
+} from "@mantine/core";
 import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
 
 type Props = {
@@ -19,11 +26,11 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
   const validWeeksCount = weeklyThroughput.filter(
     (v) => v != null && v > 0,
   ).length;
-  const hasMinimumWeeks = validWeeksCount >= 4;
+  const hasAtLeastOneWeek = validWeeksCount >= 1;
   const projectSizeValid =
     projectSize != null && projectSize > 0 && Number.isInteger(projectSize);
   const startDateValid = startDate.trim().length > 0;
-  const canRun = hasMinimumWeeks && projectSizeValid && startDateValid;
+  const canRun = hasAtLeastOneWeek && projectSizeValid && startDateValid;
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -63,9 +70,20 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
         >
           Run simulation
         </Button>
+        {validWeeksCount >= 1 && validWeeksCount <= 2 && (
+          <Alert variant="light" color="yellow" title="Low confidence">
+            With only 1–2 weeks of history, results can swing a lot. Add 4–6
+            weeks for more reliable forecasts.
+          </Alert>
+        )}
+        {validWeeksCount === 3 && (
+          <Alert variant="light" color="blue" title="Medium confidence">
+            3 weeks is workable, but 4–6 weeks is more reliable.
+          </Alert>
+        )}
         {!canRun && !isRunning && (
           <Text size="xs" c="dimmed">
-            Enter remaining work and at least 4 historical weeks.
+            Enter remaining work and at least one completed week.
           </Text>
         )}
       </Stack>
