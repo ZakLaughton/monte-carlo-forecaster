@@ -1,4 +1,4 @@
-import { Paper, Text, Loader, Group } from "@mantine/core";
+import { Text, Loader, Group } from "@mantine/core";
 
 type StatusCardState = "idle" | "running" | "done";
 
@@ -7,48 +7,63 @@ type Props = {
   simulationCount?: number;
 };
 
+function CheckIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ color: "var(--mantine-color-teal-6)", flexShrink: 0 }}
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
 export function StatusCard({ state, simulationCount = 10_000 }: Props) {
   return (
-    <Paper p="lg" withBorder radius="md" ta="center" style={{ minHeight: 88 }}>
-      <div className="status-card">
-        <div
-          className={`status-card__layer${
-            state === "idle" ? " status-card__layer--visible" : ""
-          }`}
-        >
-          <Text size="lg" fw={600} mb={4}>
-            Your forecast will appear here
-          </Text>
-          <Text size="sm" c="dimmed">
-            Enter your past weekly throughput and total remaining work, then hit
-            Run to see delivery predictions at different confidence levels.
-          </Text>
-        </div>
-        <div
-          className={`status-card__layer${
-            state === "running" ? " status-card__layer--visible" : ""
-          }`}
-        >
-          <Group justify="center" gap="xs" py={4}>
-            <Loader size={16} />
-            <Text size="sm" fw={500} c="dimmed">
-              Running {simulationCount.toLocaleString()} simulations\u2026
-            </Text>
-          </Group>
-        </div>
-        <div
-          className={`status-card__layer${
-            state === "done" ? " status-card__layer--visible" : ""
-          }`}
-        >
-          <Text size="sm" fw={500} c="teal">
-            Forecast updated
-          </Text>
-          <Text size="xs" c="dimmed">
-            Based on {simulationCount.toLocaleString()} simulations
-          </Text>
-        </div>
+    <div className="status-row" aria-live="polite">
+      <div
+        className={`status-row__layer${
+          state === "idle" ? " status-row__layer--visible" : ""
+        }`}
+      >
+        <Text size="sm" fw={400} c="dimmed">
+          Enter throughput and remaining work, then run simulation.
+        </Text>
       </div>
-    </Paper>
+
+      <div
+        className={`status-row__layer${
+          state === "running" ? " status-row__layer--visible" : ""
+        }`}
+      >
+        <Group justify="flex-start" gap={6} wrap="nowrap">
+          <Loader size={14} />
+          <Text size="sm" fw={400} c="dimmed">
+            Running {simulationCount.toLocaleString()} simulations…
+          </Text>
+        </Group>
+      </div>
+
+      <div
+        className={`status-row__layer${
+          state === "done" ? " status-row__layer--visible" : ""
+        }`}
+      >
+        <Group justify="flex-start" gap={6} wrap="nowrap">
+          <CheckIcon />
+          <Text size="sm" fw={400} c="dimmed">
+            Forecast updated · Based on {simulationCount.toLocaleString()}{" "}
+            simulations
+          </Text>
+        </Group>
+      </div>
+    </div>
   );
 }
