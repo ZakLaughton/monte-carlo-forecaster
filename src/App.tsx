@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
-import "./App.css";
+import { Container, Title, Stack } from "@mantine/core";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { ForecastResults } from "./components/ForecastResults";
 import { toOddsByWeek } from "./utils/stats";
-import { DeliveryOddsTable } from "./components/DeliveryOddsChart";
-import { DeliveryOddsBarChart } from "./components/DeliveryOddsChart";
-import { DeliveryOddsAreaChart } from "./components/DeliveryOddsChart";
+import {
+  DeliveryOddsTable,
+  DeliveryOddsBarChart,
+  DeliveryOddsAreaChart,
+} from "./components/DeliveryOddsChart";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -27,18 +29,22 @@ function App() {
   );
 
   return (
-    <div>
-      <h1>Data-Driven Sprint Forecaster</h1>
-      <SimulationForm onRun={runSimulation} />
-      {oddsByWeek.length > 0 && (
-        <>
-          <DeliveryOddsTable data={oddsByWeek} />
-          <DeliveryOddsBarChart data={oddsByWeek} />
-          <DeliveryOddsAreaChart data={oddsByWeek} />
-        </>
-      )}
-      <ForecastResults data={simulationResults} />
-    </div>
+    <Container size="md" py="xl">
+      <Stack gap="lg">
+        <Title order={1} ta="center">
+          Data-Driven Sprint Forecaster
+        </Title>
+        <SimulationForm onRun={runSimulation} />
+        {oddsByWeek.length > 0 && (
+          <>
+            <DeliveryOddsTable data={oddsByWeek} />
+            <DeliveryOddsBarChart data={oddsByWeek} />
+            <DeliveryOddsAreaChart data={oddsByWeek} />
+          </>
+        )}
+        <ForecastResults data={simulationResults} />
+      </Stack>
+    </Container>
   );
 }
 

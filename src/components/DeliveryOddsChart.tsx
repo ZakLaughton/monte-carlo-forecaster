@@ -18,8 +18,7 @@ type Props = {
 
 function calculatePercentileData(data: { weeks: number; p: number }[]) {
   const targets = [
-    0.1, 0.2, 0.3, 0.4, 0.5, 0.6,
-    0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0,
+    0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0,
   ];
   const percentiles = [];
   for (const i of targets) {
