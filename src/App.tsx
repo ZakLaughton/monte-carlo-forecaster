@@ -2,13 +2,9 @@ import { useMemo, useState } from "react";
 import { Container, Title, Stack, Grid } from "@mantine/core";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
-import { ForecastResults } from "./components/ForecastResults";
 import { toOddsByWeek } from "./utils/stats";
-import {
-  DeliveryOddsTable,
-  DeliveryOddsBarChart,
-} from "./components/DeliveryOddsChart";
-import { KeyOutcomes } from "./components/KeyOutcomes";
+import { ResultsPanel } from "./components/ResultsPanel";
+import { EmptyState } from "./components/EmptyState";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -39,13 +35,13 @@ function App() {
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 7 }}>
             {oddsByWeek.length > 0 ? (
-              <Stack gap="md">
-                <KeyOutcomes data={oddsByWeek} />
-                <DeliveryOddsTable data={oddsByWeek} />
-                <ForecastResults data={simulationResults} />
-                <DeliveryOddsBarChart data={oddsByWeek} />
-              </Stack>
-            ) : null}
+              <ResultsPanel
+                oddsByWeek={oddsByWeek}
+                simulationResults={simulationResults}
+              />
+            ) : (
+              <EmptyState />
+            )}
           </Grid.Col>
         </Grid>
       </Stack>
