@@ -10,6 +10,7 @@ import {
 import { BarChart, Bar } from "recharts";
 import { LabelList } from "recharts";
 import { AreaChart, Area } from "recharts";
+import { Table } from "@mantine/core";
 
 type Props = {
   data: { weeks: number; p: number; count: number }[];
@@ -57,42 +58,22 @@ export function DeliveryOddsTable({ data }: Props) {
   const percentiles = calculatePercentileData(data);
 
   return (
-    <table
-      style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}
-    >
-      <thead>
-        <tr>
-          <th style={{ border: "1px solid #ddd", padding: "8px" }}>
-            Percentile
-          </th>
-          <th style={{ border: "1px solid #ddd", padding: "8px" }}>Weeks</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table striped highlightOnHover withTableBorder>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th ta="center">Percentile</Table.Th>
+          <Table.Th ta="center">Weeks</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
         {percentiles.map((row) => (
-          <tr key={row.percentile}>
-            <td
-              style={{
-                border: "1px solid #ddd",
-                padding: "8px",
-                textAlign: "center",
-              }}
-            >
-              {row.percentile}
-            </td>
-            <td
-              style={{
-                border: "1px solid #ddd",
-                padding: "8px",
-                textAlign: "center",
-              }}
-            >
-              {row.weeks}
-            </td>
-          </tr>
+          <Table.Tr key={row.percentile}>
+            <Table.Td ta="center">{row.percentile}</Table.Td>
+            <Table.Td ta="center">{row.weeks}</Table.Td>
+          </Table.Tr>
         ))}
-      </tbody>
-    </table>
+      </Table.Tbody>
+    </Table>
   );
 }
 
