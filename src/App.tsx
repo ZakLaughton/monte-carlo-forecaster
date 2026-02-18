@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { Container, Title, Stack, Button, Collapse, Grid } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Container, Title, Stack, Grid } from "@mantine/core";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { ForecastResults } from "./components/ForecastResults";
@@ -13,7 +12,6 @@ import { KeyOutcomes } from "./components/KeyOutcomes";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
-  const [chartOpen, { toggle: toggleChart }] = useDisclosure(false);
 
   const runSimulation = (velocities: number[], projectSize: number) => {
     const simulatedLengths = simulateDeliveryWeeks({
@@ -45,12 +43,7 @@ function App() {
                 <KeyOutcomes data={oddsByWeek} />
                 <DeliveryOddsTable data={oddsByWeek} />
                 <ForecastResults data={simulationResults} />
-                <Button variant="subtle" size="sm" onClick={toggleChart}>
-                  {chartOpen ? "Hide" : "Show"} distribution chart
-                </Button>
-                <Collapse in={chartOpen}>
-                  <DeliveryOddsBarChart data={oddsByWeek} />
-                </Collapse>
+                <DeliveryOddsBarChart data={oddsByWeek} />
               </Stack>
             ) : null}
           </Grid.Col>
