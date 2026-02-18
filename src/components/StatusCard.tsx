@@ -59,8 +59,7 @@ export function StatusCard({ state, simulationCount = 10_000 }: Props) {
         <Group justify="flex-start" gap={6} wrap="nowrap">
           <CheckIcon />
           <Text size="xs" fw={400} c="dimmed">
-            Forecast updated · Based on {simulationCount.toLocaleString()}{" "}
-            simulations
+            Forecast updated ({simulationCount.toLocaleString()} simulations)
           </Text>
         </Group>
       </div>
