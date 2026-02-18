@@ -53,7 +53,25 @@ export function DeliveryOddsTable({ data }: Props) {
 
   return (
     <>
-      <Table striped highlightOnHover withTableBorder>
+      <Table
+        striped
+        highlightOnHover
+        withTableBorder
+        fz="xs"
+        styles={{
+          th: {
+            color: "var(--mantine-color-dimmed)",
+            fontWeight: 500,
+            paddingBlock: 6,
+          },
+          td: {
+            paddingBlock: 5,
+          },
+          table: {
+            borderColor: "var(--mantine-color-dark-4)",
+          },
+        }}
+      >
         <Table.Thead>
           <Table.Tr>
             <Table.Th ta="center">Confidence</Table.Th>
@@ -71,7 +89,7 @@ export function DeliveryOddsTable({ data }: Props) {
           ))}
         </Table.Tbody>
       </Table>
-      <Anchor component="button" size="sm" mt={4} onClick={toggle}>
+      <Anchor component="button" size="xs" mt={4} c="dimmed" onClick={toggle}>
         {showFull ? "Show less" : "Show full distribution"}
       </Anchor>
     </>
