@@ -6,6 +6,7 @@ import {
   Group,
   ActionIcon,
   Text,
+  Tooltip,
 } from "@mantine/core";
 
 type Props = {
@@ -38,9 +39,26 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
   return (
     <Stack gap={6}>
       <div>
-        <Text fw={500} size="sm">
-          Completed Work Items
-        </Text>
+        <Group gap={6} align="center" wrap="nowrap">
+          <Text fw={500} size="sm">
+            Completed Work Items
+          </Text>
+          <Tooltip
+            label="Use weeks that reflect similar team composition and work type. If the nature of work changes significantly, your forecast may not hold."
+            multiline
+            w={320}
+            withArrow
+          >
+            <ActionIcon
+              size="xs"
+              variant="subtle"
+              color="gray"
+              aria-label="Throughput guidance"
+            >
+              i
+            </ActionIcon>
+          </Tooltip>
+        </Group>
         <Text size="xs" c="dimmed">
           Enter the number of work items completed each week.
         </Text>
