@@ -63,7 +63,7 @@ function App() {
   return (
     <Container size={960} py="md">
       <Stack gap="md">
-        <Title order={4} ta="center" fw={500} c="dimmed">
+        <Title order={4} ta="center" fw={600} c="gray.3">
           Delivery Forecast
         </Title>
         <Grid gutter="md" align="flex-start">
