@@ -33,7 +33,7 @@ export function StatusCard({ state, simulationCount = 10_000 }: Props) {
           state === "idle" ? " status-row__layer--visible" : ""
         }`}
       >
-        <Text size="xs" fw={400} c="dimmed">
+        <Text size="xs" fw={400} c="gray.6">
           Enter throughput and remaining work, then run simulation.
         </Text>
       </div>

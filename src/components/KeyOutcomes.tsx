@@ -18,16 +18,36 @@ type Outcome = {
   weeks: number | null;
 };
 
-function OutcomeMetric({ label, sublabel, weeks }: Outcome) {
+function OutcomeMetric({
+  label,
+  sublabel,
+  weeks,
+  isPlaceholder = false,
+}: Outcome & { isPlaceholder?: boolean }) {
   const weeksText =
-    weeks != null ? `${weeks} ${weeks === 1 ? "week" : "weeks"}` : "—";
+    weeks != null ? `${weeks} ${weeks === 1 ? "week" : "weeks"}` : "— weeks";
 
   return (
     <Stack gap={2} align="center">
-      <Text fw={700} fz={28} lh={1.1} c={weeks == null ? "dimmed" : undefined}>
+      <Text
+        fw={700}
+        fz={28}
+        lh={1.1}
+        c={weeks == null ? "dimmed" : undefined}
+        style={
+          isPlaceholder
+            ? {
+                background: "var(--mantine-color-dark-6)",
+                borderRadius: 8,
+                paddingInline: 10,
+                paddingBlock: 1,
+              }
+            : undefined
+        }
+      >
         {weeksText}
       </Text>
-      <Text fw={600} fz="sm">
+      <Text fw={600} fz="sm" c={isPlaceholder ? "dimmed" : undefined}>
         {label}
       </Text>
       <Text c="dimmed" fz="xs">
@@ -38,6 +58,7 @@ function OutcomeMetric({ label, sublabel, weeks }: Outcome) {
 }
 
 export function KeyOutcomes({ data }: Props) {
+  const isEmpty = data.length === 0;
   const p50 = getPercentileWeeks(data, 0.5);
   const p85 = getPercentileWeeks(data, 0.85);
   const p95 = getPercentileWeeks(data, 0.95);
@@ -55,8 +76,11 @@ export function KeyOutcomes({ data }: Props) {
       withBorder
       radius="md"
       style={(theme) => ({
-        background: `linear-gradient(135deg, ${theme.colors.blue[9]}22, ${theme.colors.violet[9]}22)`,
-        borderColor: theme.colors.blue[7],
+        background: isEmpty
+          ? `linear-gradient(135deg, ${theme.colors.dark[7]}, ${theme.colors.dark[6]})`
+          : `linear-gradient(135deg, ${theme.colors.blue[9]}22, ${theme.colors.violet[9]}22)`,
+        borderColor: isEmpty ? theme.colors.dark[4] : theme.colors.blue[7],
+        opacity: isEmpty ? 0.82 : 1,
       })}
     >
       <Title order={4} ta="center" mb="sm">
@@ -64,7 +88,7 @@ export function KeyOutcomes({ data }: Props) {
       </Title>
       <Group justify="space-evenly" grow>
         {outcomes.map((o) => (
-          <OutcomeMetric key={o.label} {...o} />
+          <OutcomeMetric key={o.label} {...o} isPlaceholder={isEmpty} />
         ))}
       </Group>
     </Paper>
