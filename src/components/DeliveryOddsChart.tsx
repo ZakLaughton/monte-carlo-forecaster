@@ -105,17 +105,24 @@ export function DeliveryOddsBarChart({ data }: Props) {
       </Title>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={exactCounts}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="weeks" />
-          <YAxis tickFormatter={(v) => `${v}`} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#555" />
+          <XAxis dataKey="weeks" tick={{ fill: "#999", fontSize: 12 }} />
+          <YAxis
+            tickFormatter={(v) => `${v}`}
+            tick={{ fill: "#999", fontSize: 12 }}
+          />
           <Tooltip
             formatter={(value?: number) =>
               value == null ? "" : `${value} items`
             }
             labelFormatter={(label) => `Week ${label}`}
           />
-          <Bar dataKey="count" fill="#8884d8">
-            <LabelList dataKey="count" position="top" />
+          <Bar dataKey="count" fill="#7b79b4">
+            <LabelList
+              dataKey="count"
+              position="top"
+              style={{ fill: "#aaa", fontSize: 11 }}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
