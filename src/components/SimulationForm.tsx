@@ -19,7 +19,7 @@ export const SimulationForm = ({ onRun }: Props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack maw={400} mx="auto">
+      <Stack>
         <SprintVelocityInput
           velocities={sprintVelocities}
           onChange={setSprintVelocities}

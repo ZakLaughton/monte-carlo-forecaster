@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Container, Title, Stack, Button, Collapse } from "@mantine/core";
+import { Container, Title, Stack, Button, Collapse, Grid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
@@ -29,24 +29,30 @@ function App() {
   );
 
   return (
-    <Container size="md" py="xl">
+    <Container size="lg" py="xl">
       <Stack gap="lg">
         <Title order={1} ta="center">
           Data-Driven Sprint Forecaster
         </Title>
-        <SimulationForm onRun={runSimulation} />
-        {oddsByWeek.length > 0 && (
-          <>
-            <DeliveryOddsTable data={oddsByWeek} />
-            <ForecastResults data={simulationResults} />
-            <Button variant="subtle" size="sm" onClick={toggleChart}>
-              {chartOpen ? "Hide" : "Show"} distribution chart
-            </Button>
-            <Collapse in={chartOpen}>
-              <DeliveryOddsBarChart data={oddsByWeek} />
-            </Collapse>
-          </>
-        )}
+        <Grid gutter="lg">
+          <Grid.Col span={{ base: 12, md: 5 }}>
+            <SimulationForm onRun={runSimulation} />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 7 }}>
+            {oddsByWeek.length > 0 ? (
+              <Stack gap="md">
+                <DeliveryOddsTable data={oddsByWeek} />
+                <ForecastResults data={simulationResults} />
+                <Button variant="subtle" size="sm" onClick={toggleChart}>
+                  {chartOpen ? "Hide" : "Show"} distribution chart
+                </Button>
+                <Collapse in={chartOpen}>
+                  <DeliveryOddsBarChart data={oddsByWeek} />
+                </Collapse>
+              </Stack>
+            ) : null}
+          </Grid.Col>
+        </Grid>
       </Stack>
     </Container>
   );
