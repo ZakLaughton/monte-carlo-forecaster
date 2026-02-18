@@ -7,7 +7,6 @@ import { toOddsByWeek } from "./utils/stats";
 import {
   DeliveryOddsTable,
   DeliveryOddsBarChart,
-  DeliveryOddsAreaChart,
 } from "./components/DeliveryOddsChart";
 
 function App() {
@@ -38,7 +37,6 @@ function App() {
           <>
             <DeliveryOddsTable data={oddsByWeek} />
             <DeliveryOddsBarChart data={oddsByWeek} />
-            <DeliveryOddsAreaChart data={oddsByWeek} />
           </>
         )}
         <ForecastResults data={simulationResults} />
