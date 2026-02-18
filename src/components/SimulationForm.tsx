@@ -5,16 +5,25 @@ import {
   TextInput,
   Text,
   Alert,
+  Group,
 } from "@mantine/core";
 import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
-import { useSimulationFormStorage } from "../hooks/useSimulationFormStorage";
+import {
+  getTodayIsoDate,
+  useSimulationFormStorage,
+} from "../hooks/useSimulationFormStorage";
 
 type Props = {
   onRun: (velocities: number[], size: number, startDate: string) => void;
+  onReset?: () => void;
   isRunning?: boolean;
 };
 
-export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
+export const SimulationForm = ({
+  onRun,
+  onReset,
+  isRunning = false,
+}: Props) => {
   const {
     weeklyThroughput,
     projectSize,
@@ -22,6 +31,7 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
     setWeeklyThroughput,
     setProjectSize,
     setStartDate,
+    resetForm,
   } = useSimulationFormStorage();
 
   const validWeeksCount = weeklyThroughput.filter(
@@ -37,6 +47,26 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
     e.preventDefault();
     if (!canRun) return;
     onRun(weeklyThroughput as number[], projectSize as number, startDate);
+  };
+
+  const handleReset = () => {
+    if (isRunning) return;
+
+    const hasInput =
+      weeklyThroughput.length > 1 ||
+      weeklyThroughput.some((value) => value != null && value > 0) ||
+      projectSize != null ||
+      startDate !== getTodayIsoDate();
+
+    if (hasInput && typeof window !== "undefined") {
+      const confirmed = window.confirm(
+        "Reset form and clear forecast results?",
+      );
+      if (!confirmed) return;
+    }
+
+    resetForm();
+    onReset?.();
   };
 
   return (
@@ -64,13 +94,24 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
           onChange={(event) => setStartDate(event.currentTarget.value)}
           error={!startDateValid}
         />
-        <Button
-          type="submit"
-          disabled={!canRun || isRunning}
-          loading={isRunning}
-        >
-          Run simulation
-        </Button>
+        <Group gap="xs" grow>
+          <Button
+            type="submit"
+            disabled={!canRun || isRunning}
+            loading={isRunning}
+          >
+            Run simulation
+          </Button>
+          <Button
+            type="button"
+            variant="light"
+            color="red"
+            onClick={handleReset}
+            disabled={isRunning}
+          >
+            Reset
+          </Button>
+        </Group>
         {validWeeksCount >= 1 && validWeeksCount <= 2 && (
           <Alert variant="light" color="yellow" title="Low confidence">
             With only 1–2 weeks of history, results can swing a lot. Add 4–6

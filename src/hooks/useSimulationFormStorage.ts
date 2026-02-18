@@ -8,8 +8,16 @@ export type SimulationFormState = {
 
 const DEFAULT_STORAGE_KEY = "delivery-forecaster-form";
 
-function getTodayIsoDate() {
+export function getTodayIsoDate() {
   return new Date().toISOString().slice(0, 10);
+}
+
+export function getDefaultFormState(): SimulationFormState {
+  return {
+    weeklyThroughput: [null],
+    projectSize: null,
+    startDate: getTodayIsoDate(),
+  };
 }
 
 function sanitizeState(
@@ -35,11 +43,7 @@ function sanitizeState(
 }
 
 function loadInitialState(storageKey: string): SimulationFormState {
-  const fallback: SimulationFormState = {
-    weeklyThroughput: [null],
-    projectSize: null,
-    startDate: getTodayIsoDate(),
-  };
+  const fallback = getDefaultFormState();
 
   if (typeof window === "undefined") return fallback;
 
@@ -74,10 +78,18 @@ export function useSimulationFormStorage(storageKey = DEFAULT_STORAGE_KEY) {
     setFormState((prev) => ({ ...prev, startDate }));
   };
 
+  const resetForm = () => {
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(storageKey);
+    }
+    setFormState(getDefaultFormState());
+  };
+
   return {
     ...formState,
     setWeeklyThroughput,
     setProjectSize,
     setStartDate,
+    resetForm,
   };
 }

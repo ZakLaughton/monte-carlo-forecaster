@@ -4,6 +4,7 @@ import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { toOddsByWeek } from "./utils/stats";
 import { ResultsPanel } from "./components/ResultsPanel";
+import { getTodayIsoDate } from "./hooks/useSimulationFormStorage";
 
 const MIN_RUNNING_MS = 400;
 const REVEAL_TRANSITION_MS = 200;
@@ -55,6 +56,15 @@ function App() {
     [],
   );
 
+  const resetForecast = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
+    setSimulationResults([]);
+    setForecastStartDate(getTodayIsoDate());
+    setIsRunning(false);
+    setIsRevealing(false);
+  }, []);
+
   const oddsByWeek = useMemo(
     () => toOddsByWeek(simulationResults),
     [simulationResults],
@@ -69,7 +79,11 @@ function App() {
         <Grid gutter="md" align="flex-start">
           <Grid.Col span={{ base: 12, md: 5 }}>
             <Paper p="md" withBorder radius="md">
-              <SimulationForm onRun={runSimulation} isRunning={busy} />
+              <SimulationForm
+                onRun={runSimulation}
+                onReset={resetForecast}
+                isRunning={busy}
+              />
             </Paper>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 7 }}>
