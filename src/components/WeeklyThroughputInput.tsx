@@ -18,8 +18,24 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const handleVelocityChange = (index: number, value: number | string) => {
+    const parsedValue = (() => {
+      if (typeof value === "number" && Number.isFinite(value)) {
+        return value;
+      }
+
+      if (typeof value === "string") {
+        const trimmed = value.trim();
+        if (trimmed === "") return null;
+
+        const asNumber = Number(trimmed);
+        if (Number.isFinite(asNumber)) return asNumber;
+      }
+
+      return null;
+    })();
+
     const updated = [...velocities];
-    updated[index] = typeof value === "number" ? value : null;
+    updated[index] = parsedValue;
     onChange(updated);
   };
 
@@ -85,7 +101,6 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
               value={velocity ?? ""}
               placeholder="e.g. 3"
               onChange={(value) => handleVelocityChange(index, value)}
-              min={0}
               allowDecimal={false}
               allowNegative={false}
               size="xs"

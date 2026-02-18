@@ -24,6 +24,10 @@ function App() {
 
   const runSimulation = useCallback(
     (velocities: number[], projectSize: number, startDate: string) => {
+      const sanitizedVelocities = velocities.filter(
+        (value) => typeof value === "number" && Number.isFinite(value),
+      );
+
       if (timerRef.current) clearTimeout(timerRef.current);
       if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
       setIsRunning(true);
@@ -34,7 +38,7 @@ function App() {
 
       // Compute immediately
       const results = simulateDeliveryWeeks({
-        velocityHistory: velocities,
+        velocityHistory: sanitizedVelocities,
         projectSize,
       });
 

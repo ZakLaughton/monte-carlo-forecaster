@@ -46,7 +46,13 @@ export const SimulationForm = ({
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!canRun) return;
-    onRun(weeklyThroughput as number[], projectSize as number, startDate);
+
+    const normalizedWeeklyThroughput = weeklyThroughput.filter(
+      (value): value is number =>
+        typeof value === "number" && Number.isFinite(value),
+    );
+
+    onRun(normalizedWeeklyThroughput, projectSize as number, startDate);
   };
 
   const handleReset = () => {
