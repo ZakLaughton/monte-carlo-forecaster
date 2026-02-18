@@ -9,6 +9,7 @@ import {
   DeliveryOddsTable,
   DeliveryOddsBarChart,
 } from "./components/DeliveryOddsChart";
+import { KeyOutcomes } from "./components/KeyOutcomes";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -41,6 +42,7 @@ function App() {
           <Grid.Col span={{ base: 12, md: 7 }}>
             {oddsByWeek.length > 0 ? (
               <Stack gap="md">
+                <KeyOutcomes data={oddsByWeek} />
                 <DeliveryOddsTable data={oddsByWeek} />
                 <ForecastResults data={simulationResults} />
                 <Button variant="subtle" size="sm" onClick={toggleChart}>
