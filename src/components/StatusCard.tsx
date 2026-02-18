@@ -34,7 +34,7 @@ export function StatusCard({ state, simulationCount = 10_000 }: Props) {
         }`}
       >
         <Text size="xs" fw={400} c="gray.6">
-          Enter throughput and remaining work, then run simulation.
+          Enter completed work items and remaining work, then run simulation.
         </Text>
       </div>
 

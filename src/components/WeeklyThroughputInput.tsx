@@ -39,10 +39,10 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
     <Stack gap={6}>
       <div>
         <Text fw={500} size="sm">
-          Past Weekly Throughput
+          Completed Work Items
         </Text>
         <Text size="xs" c="dimmed">
-          Enter the number of stories completed each week.
+          Enter the number of work items completed each week.
         </Text>
       </div>
 

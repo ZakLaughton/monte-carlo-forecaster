@@ -37,7 +37,7 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
           onChange={setWeeklyThroughput}
         />
         <NumberInput
-          label="Total remaining work (stories)"
+          label="Total remaining work items"
           value={projectSize ?? ""}
           onChange={(val) =>
             setProjectSize(typeof val === "number" ? val : null)
