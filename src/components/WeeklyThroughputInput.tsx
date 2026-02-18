@@ -68,7 +68,7 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
           </Tooltip>
         </Group>
         <Text size="xs" c="dimmed">
-          Enter the number of work items completed each week.
+          Add at least 4–6 historical weeks for more reliable results.
         </Text>
       </div>
 
@@ -83,6 +83,7 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
                 inputRefs.current[index] = el as unknown as HTMLInputElement;
               }}
               value={velocity ?? ""}
+              placeholder="e.g. 3"
               onChange={(value) => handleVelocityChange(index, value)}
               min={0}
               allowDecimal={false}
@@ -90,7 +91,6 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
               size="xs"
               w={60}
               hideControls
-              error={velocity === null}
             />
             <ActionIcon
               color="gray"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NumberInput, Button, Stack, TextInput } from "@mantine/core";
+import { NumberInput, Button, Stack, TextInput, Text } from "@mantine/core";
 import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
 
 type Props = {
@@ -9,19 +9,21 @@ type Props = {
 
 export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
   const [weeklyThroughput, setWeeklyThroughput] = useState<(number | null)[]>([
-    3, 5, 2, 4, 5, 4, 3,
+    null,
   ]);
-  const [projectSize, setProjectSize] = useState<number | null>(20);
+  const [projectSize, setProjectSize] = useState<number | null>(null);
   const [startDate, setStartDate] = useState(() =>
     new Date().toISOString().slice(0, 10),
   );
 
-  const allWeeksValid =
-    weeklyThroughput.length > 0 &&
-    weeklyThroughput.every((v) => v != null && v >= 0);
-  const projectSizeValid = projectSize != null && projectSize > 0;
+  const validWeeksCount = weeklyThroughput.filter(
+    (v) => v != null && v > 0,
+  ).length;
+  const hasMinimumWeeks = validWeeksCount >= 4;
+  const projectSizeValid =
+    projectSize != null && projectSize > 0 && Number.isInteger(projectSize);
   const startDateValid = startDate.trim().length > 0;
-  const canRun = allWeeksValid && projectSizeValid && startDateValid;
+  const canRun = hasMinimumWeeks && projectSizeValid && startDateValid;
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -39,13 +41,13 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
         <NumberInput
           label="Total remaining work items"
           value={projectSize ?? ""}
+          placeholder="e.g. 20"
           onChange={(val) =>
             setProjectSize(typeof val === "number" ? val : null)
           }
           min={1}
           allowDecimal={false}
           allowNegative={false}
-          error={projectSize === null}
         />
         <TextInput
           label="Forecast start date"
@@ -61,6 +63,11 @@ export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
         >
           Run simulation
         </Button>
+        {!canRun && !isRunning && (
+          <Text size="xs" c="dimmed">
+            Enter remaining work and at least 4 historical weeks.
+          </Text>
+        )}
       </Stack>
     </form>
   );
