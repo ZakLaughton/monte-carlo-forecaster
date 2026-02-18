@@ -7,30 +7,44 @@ type Props = {
 };
 
 export const SimulationForm = ({ onRun }: Props) => {
-  const [weeklyThroughput, setWeeklyThroughput] = useState<number[]>([
+  const [weeklyThroughput, setWeeklyThroughput] = useState<(number | null)[]>([
     3, 5, 2, 4, 5, 4, 3,
   ]);
-  const [projectSize, setProjectSize] = useState(20);
+  const [projectSize, setProjectSize] = useState<number | null>(20);
+
+  const allWeeksValid =
+    weeklyThroughput.length > 0 &&
+    weeklyThroughput.every((v) => v != null && v >= 0);
+  const projectSizeValid = projectSize != null && projectSize > 0;
+  const canRun = allWeeksValid && projectSizeValid;
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    onRun(weeklyThroughput, projectSize);
+    if (!canRun) return;
+    onRun(weeklyThroughput as number[], projectSize as number);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack>
+      <Stack gap="md">
         <WeeklyThroughputInput
           velocities={weeklyThroughput}
           onChange={setWeeklyThroughput}
         />
         <NumberInput
           label="Total remaining work (stories)"
-          value={projectSize}
-          onChange={(val) => setProjectSize(typeof val === "number" ? val : 0)}
+          value={projectSize ?? ""}
+          onChange={(val) =>
+            setProjectSize(typeof val === "number" ? val : null)
+          }
           min={1}
+          allowDecimal={false}
+          allowNegative={false}
+          error={projectSize === null}
         />
-        <Button type="submit">Run simulation</Button>
+        <Button type="submit" disabled={!canRun}>
+          Run simulation
+        </Button>
       </Stack>
     </form>
   );

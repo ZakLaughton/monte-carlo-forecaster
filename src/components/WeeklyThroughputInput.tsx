@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   NumberInput,
   Button,
@@ -8,19 +9,26 @@ import {
 } from "@mantine/core";
 
 type Props = {
-  velocities: number[];
-  onChange: (velocities: number[]) => void;
+  velocities: (number | null)[];
+  onChange: (velocities: (number | null)[]) => void;
 };
 
 export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
   const handleVelocityChange = (index: number, value: number | string) => {
     const updated = [...velocities];
-    updated[index] = typeof value === "number" ? value : 0;
+    updated[index] = typeof value === "number" ? value : null;
     onChange(updated);
   };
 
   const addWeek = () => {
-    onChange([...velocities, 0]);
+    onChange([...velocities, null]);
+    // Focus the new input after render
+    requestAnimationFrame(() => {
+      const newIndex = velocities.length;
+      inputRefs.current[newIndex]?.focus();
+    });
   };
 
   const removeWeek = (index: number) => {
@@ -28,36 +36,49 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
   };
 
   return (
-    <Stack gap={4}>
-      <Text fw={500} size="sm">
-        Past Weekly Throughput
-      </Text>
+    <Stack gap={6}>
+      <div>
+        <Text fw={500} size="sm">
+          Past Weekly Throughput
+        </Text>
+        <Text size="xs" c="dimmed">
+          Enter the number of stories completed each week.
+        </Text>
+      </div>
 
-      {velocities.map((velocity, index) => (
-        <Group key={index} gap="xs" wrap="nowrap">
-          <Text size="sm" w={70} style={{ flexShrink: 0 }}>
-            Week {index + 1}
-          </Text>
-          <NumberInput
-            value={velocity}
-            onChange={(value) => handleVelocityChange(index, value)}
-            min={0}
-            size="xs"
-            w={60}
-            hideControls
-          />
-          <ActionIcon
-            color="red"
-            variant="subtle"
-            size="sm"
-            onClick={() => removeWeek(index)}
-            disabled={velocities.length === 1}
-            aria-label={`Remove week ${index + 1}`}
-          >
-            ✕
-          </ActionIcon>
-        </Group>
-      ))}
+      <Stack gap={4}>
+        {velocities.map((velocity, index) => (
+          <Group key={index} gap="xs" wrap="nowrap" align="center">
+            <Text size="sm" w={70} style={{ flexShrink: 0 }}>
+              Week {index + 1}
+            </Text>
+            <NumberInput
+              ref={(el) => {
+                inputRefs.current[index] = el as unknown as HTMLInputElement;
+              }}
+              value={velocity ?? ""}
+              onChange={(value) => handleVelocityChange(index, value)}
+              min={0}
+              allowDecimal={false}
+              allowNegative={false}
+              size="xs"
+              w={60}
+              hideControls
+              error={velocity === null}
+            />
+            <ActionIcon
+              color="gray"
+              variant="subtle"
+              size="sm"
+              onClick={() => removeWeek(index)}
+              disabled={velocities.length === 1}
+              aria-label={`Remove week ${index + 1}`}
+            >
+              ✕
+            </ActionIcon>
+          </Group>
+        ))}
+      </Stack>
 
       <Button
         variant="light"
