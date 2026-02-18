@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Container, Title, Stack, Grid } from "@mantine/core";
+import { Container, Title, Stack, Grid, Paper } from "@mantine/core";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { toOddsByWeek } from "./utils/stats";
@@ -23,14 +23,16 @@ function App() {
   );
 
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="lg">
-        <Title order={1} ta="center">
+    <Container size={960} py="xl">
+      <Stack gap="md">
+        <Title order={2} ta="center" fw={600}>
           Data-Driven Sprint Forecaster
         </Title>
-        <Grid gutter="lg">
+        <Grid gutter="md" align="flex-start">
           <Grid.Col span={{ base: 12, md: 5 }}>
-            <SimulationForm onRun={runSimulation} />
+            <Paper p="md" withBorder radius="md">
+              <SimulationForm onRun={runSimulation} />
+            </Paper>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 7 }}>
             <ResultsPanel
