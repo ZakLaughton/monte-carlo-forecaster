@@ -23,9 +23,9 @@ function App() {
   );
 
   return (
-    <Container size={960} py="xl">
+    <Container size={960} py="md">
       <Stack gap="md">
-        <Title order={2} ta="center" fw={600}>
+        <Title order={4} ta="center" fw={500} c="dimmed">
           Data-Driven Forecaster
         </Title>
         <Grid gutter="md" align="flex-start">
