@@ -26,7 +26,7 @@ function App() {
     <Container size={960} py="xl">
       <Stack gap="md">
         <Title order={2} ta="center" fw={600}>
-          Data-Driven Sprint Forecaster
+          Data-Driven Forecaster
         </Title>
         <Grid gutter="md" align="flex-start">
           <Grid.Col span={{ base: 12, md: 5 }}>

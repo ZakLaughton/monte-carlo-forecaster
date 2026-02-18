@@ -20,8 +20,8 @@ export function ResultsPanel({ oddsByWeek, simulationResults }: Props) {
             Your forecast will appear here
           </Text>
           <Text size="sm" c="dimmed">
-            Enter your past sprint velocities and project size, then hit Run to
-            see delivery predictions at different confidence levels.
+            Enter your past weekly throughput and total remaining work, then hit
+            Run to see delivery predictions at different confidence levels.
           </Text>
         </Paper>
       )}

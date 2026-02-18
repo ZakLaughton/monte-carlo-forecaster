@@ -1,31 +1,31 @@
 import { useState } from "react";
 import { NumberInput, Button, Stack } from "@mantine/core";
-import { SprintVelocityInput } from "./SprintVelocityInput";
+import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
 
 type Props = {
   onRun: (velocities: number[], size: number) => void;
 };
 
 export const SimulationForm = ({ onRun }: Props) => {
-  const [sprintVelocities, setSprintVelocities] = useState<number[]>([
+  const [weeklyThroughput, setWeeklyThroughput] = useState<number[]>([
     3, 5, 2, 4, 5, 4, 3,
   ]);
   const [projectSize, setProjectSize] = useState(20);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    onRun(sprintVelocities, projectSize);
+    onRun(weeklyThroughput, projectSize);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack>
-        <SprintVelocityInput
-          velocities={sprintVelocities}
-          onChange={setSprintVelocities}
+        <WeeklyThroughputInput
+          velocities={weeklyThroughput}
+          onChange={setWeeklyThroughput}
         />
         <NumberInput
-          label="Project size (number of stories)"
+          label="Total remaining work (stories)"
           value={projectSize}
           onChange={(val) => setProjectSize(typeof val === "number" ? val : 0)}
           min={1}

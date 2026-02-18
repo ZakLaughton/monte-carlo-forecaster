@@ -12,31 +12,31 @@ type Props = {
   onChange: (velocities: number[]) => void;
 };
 
-export const SprintVelocityInput = ({ velocities, onChange }: Props) => {
+export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
   const handleVelocityChange = (index: number, value: number | string) => {
     const updated = [...velocities];
     updated[index] = typeof value === "number" ? value : 0;
     onChange(updated);
   };
 
-  const addSprint = () => {
+  const addWeek = () => {
     onChange([...velocities, 0]);
   };
 
-  const removeSprint = (index: number) => {
+  const removeWeek = (index: number) => {
     onChange(velocities.filter((_, i) => i !== index));
   };
 
   return (
     <Stack gap={4}>
       <Text fw={500} size="sm">
-        Past Sprint Velocities
+        Past Weekly Throughput
       </Text>
 
       {velocities.map((velocity, index) => (
         <Group key={index} gap="xs" wrap="nowrap">
           <Text size="sm" w={70} style={{ flexShrink: 0 }}>
-            Sprint {index + 1}
+            Week {index + 1}
           </Text>
           <NumberInput
             value={velocity}
@@ -50,9 +50,9 @@ export const SprintVelocityInput = ({ velocities, onChange }: Props) => {
             color="red"
             variant="subtle"
             size="sm"
-            onClick={() => removeSprint(index)}
+            onClick={() => removeWeek(index)}
             disabled={velocities.length === 1}
-            aria-label={`Remove sprint ${index + 1}`}
+            aria-label={`Remove week ${index + 1}`}
           >
             ✕
           </ActionIcon>
@@ -62,10 +62,10 @@ export const SprintVelocityInput = ({ velocities, onChange }: Props) => {
       <Button
         variant="light"
         size="compact-xs"
-        onClick={addSprint}
+        onClick={addWeek}
         w="fit-content"
       >
-        + Add sprint
+        + Add week
       </Button>
     </Stack>
   );
