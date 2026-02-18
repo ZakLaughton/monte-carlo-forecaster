@@ -12,12 +12,37 @@ function getPercentileWeeks(
   return entry ? entry.weeks : null;
 }
 
+type Outcome = {
+  label: string;
+  sublabel: string;
+  weeks: number | null;
+};
+
+function OutcomeMetric({ label, sublabel, weeks }: Outcome) {
+  const weeksText =
+    weeks != null ? `${weeks} ${weeks === 1 ? "week" : "weeks"}` : "—";
+
+  return (
+    <Stack gap={2} align="center">
+      <Text fw={700} fz={28} lh={1.1} c={weeks == null ? "dimmed" : undefined}>
+        {weeksText}
+      </Text>
+      <Text fw={600} fz="sm">
+        {label}
+      </Text>
+      <Text c="dimmed" fz="xs">
+        {sublabel}
+      </Text>
+    </Stack>
+  );
+}
+
 export function KeyOutcomes({ data }: Props) {
   const p50 = getPercentileWeeks(data, 0.5);
   const p85 = getPercentileWeeks(data, 0.85);
   const p95 = getPercentileWeeks(data, 0.95);
 
-  const outcomes = [
+  const outcomes: Outcome[] = [
     { label: "Maybe", sublabel: "50% confidence", weeks: p50 },
     { label: "Likely", sublabel: "85% confidence", weeks: p85 },
     { label: "Very likely", sublabel: "95% confidence", weeks: p95 },
@@ -39,24 +64,7 @@ export function KeyOutcomes({ data }: Props) {
       </Title>
       <Group justify="space-evenly" grow>
         {outcomes.map((o) => (
-          <Stack key={o.label} gap={2} align="center">
-            <Text
-              fw={700}
-              fz={28}
-              lh={1.1}
-              c={o.weeks == null ? "dimmed" : undefined}
-            >
-              {o.weeks != null
-                ? `${o.weeks} ${o.weeks === 1 ? "week" : "weeks"}`
-                : "—"}
-            </Text>
-            <Text fw={600} fz="sm">
-              {o.label}
-            </Text>
-            <Text c="dimmed" fz="xs">
-              {o.sublabel}
-            </Text>
-          </Stack>
+          <OutcomeMetric key={o.label} {...o} />
         ))}
       </Group>
     </Paper>
