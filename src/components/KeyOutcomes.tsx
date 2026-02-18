@@ -38,22 +38,26 @@ export function KeyOutcomes({ data }: Props) {
         Key Outcomes
       </Title>
       <Group justify="space-evenly" grow>
-        {outcomes.map(
-          (o) =>
-            o.weeks != null && (
-              <Stack key={o.label} gap={2} align="center">
-                <Text fw={700} fz={28} lh={1.1}>
-                  {o.weeks} {o.weeks === 1 ? "week" : "weeks"}
-                </Text>
-                <Text fw={600} fz="sm">
-                  {o.label}
-                </Text>
-                <Text c="dimmed" fz="xs">
-                  {o.sublabel}
-                </Text>
-              </Stack>
-            ),
-        )}
+        {outcomes.map((o) => (
+          <Stack key={o.label} gap={2} align="center">
+            <Text
+              fw={700}
+              fz={28}
+              lh={1.1}
+              c={o.weeks == null ? "dimmed" : undefined}
+            >
+              {o.weeks != null
+                ? `${o.weeks} ${o.weeks === 1 ? "week" : "weeks"}`
+                : "—"}
+            </Text>
+            <Text fw={600} fz="sm">
+              {o.label}
+            </Text>
+            <Text c="dimmed" fz="xs">
+              {o.sublabel}
+            </Text>
+          </Stack>
+        ))}
       </Group>
     </Paper>
   );

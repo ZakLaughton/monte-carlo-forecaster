@@ -5,18 +5,15 @@ type ForecastResultsProps = {
 };
 
 export const ForecastResults = ({ data }: ForecastResultsProps) => {
-  if (data.length === 0) {
-    return (
-      <Text c="dimmed" ta="center">
-        Submit the form above to run a simulation.
-      </Text>
-    );
-  }
+  const min = data.length > 0 ? Math.min(...data) : null;
+  const max = data.length > 0 ? Math.max(...data) : null;
+  const median =
+    data.length > 0
+      ? [...data].sort((a, b) => a - b)[Math.floor(data.length / 2)]
+      : null;
 
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const sorted = [...data].sort((a, b) => a - b);
-  const median = sorted[Math.floor(sorted.length / 2)];
+  const fmt = (v: number | null, suffix = "") =>
+    v != null ? `${v}${suffix}` : "—";
 
   return (
     <Paper shadow="xs" p="md" withBorder>
@@ -24,16 +21,17 @@ export const ForecastResults = ({ data }: ForecastResultsProps) => {
         Simulation Summary
       </Title>
       <Text>
-        <strong>Simulations run:</strong> {data.length.toLocaleString()}
+        <strong>Simulations run:</strong>{" "}
+        {fmt(data.length > 0 ? data.length : null)}
       </Text>
       <Text>
-        <strong>Fastest completion:</strong> {min} weeks
+        <strong>Fastest completion:</strong> {fmt(min, " weeks")}
       </Text>
       <Text>
-        <strong>Slowest completion:</strong> {max} weeks
+        <strong>Slowest completion:</strong> {fmt(max, " weeks")}
       </Text>
       <Text>
-        <strong>Median:</strong> {median} weeks
+        <strong>Median:</strong> {fmt(median, " weeks")}
       </Text>
     </Paper>
   );

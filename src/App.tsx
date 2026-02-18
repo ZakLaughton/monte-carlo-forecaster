@@ -4,7 +4,6 @@ import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { toOddsByWeek } from "./utils/stats";
 import { ResultsPanel } from "./components/ResultsPanel";
-import { EmptyState } from "./components/EmptyState";
 
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
@@ -34,14 +33,10 @@ function App() {
             <SimulationForm onRun={runSimulation} />
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 7 }}>
-            {oddsByWeek.length > 0 ? (
-              <ResultsPanel
-                oddsByWeek={oddsByWeek}
-                simulationResults={simulationResults}
-              />
-            ) : (
-              <EmptyState />
-            )}
+            <ResultsPanel
+              oddsByWeek={oddsByWeek}
+              simulationResults={simulationResults}
+            />
           </Grid.Col>
         </Grid>
       </Stack>
