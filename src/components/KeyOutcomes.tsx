@@ -43,9 +43,9 @@ export function KeyOutcomes({ data }: Props) {
   const p95 = getPercentileWeeks(data, 0.95);
 
   const outcomes: Outcome[] = [
-    { label: "Maybe", sublabel: "50% confidence", weeks: p50 },
-    { label: "Likely", sublabel: "85% confidence", weeks: p85 },
-    { label: "Very likely", sublabel: "95% confidence", weeks: p95 },
+    { label: "Coin flip", sublabel: "50% confidence", weeks: p50 },
+    { label: "Highly likely", sublabel: "85% confidence", weeks: p85 },
+    { label: "Almost certain", sublabel: "95% confidence", weeks: p95 },
   ];
 
   return (
