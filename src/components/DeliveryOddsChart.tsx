@@ -10,7 +10,7 @@ import {
 import { BarChart, Bar } from "recharts";
 import { LabelList } from "recharts";
 import { AreaChart, Area } from "recharts";
-import { Table } from "@mantine/core";
+import { Table, Paper, Title } from "@mantine/core";
 
 type Props = {
   data: { weeks: number; p: number; count: number }[];
@@ -35,8 +35,11 @@ function calculatePercentileData(data: { weeks: number; p: number }[]) {
 
 export function DeliveryOddsChart({ data }: Props) {
   return (
-    <div style={{ width: "100%", height: 300, padding: "20px" }}>
-      <ResponsiveContainer>
+    <Paper shadow="xs" p="md" withBorder>
+      <Title order={4} mb="sm">
+        Cumulative Probability (Line)
+      </Title>
+      <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="weeks" />
@@ -53,7 +56,7 @@ export function DeliveryOddsChart({ data }: Props) {
           <Line type="monotone" dataKey="p" strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Paper>
   );
 }
 
@@ -91,8 +94,11 @@ export function DeliveryOddsBarChart({ data }: Props) {
   });
 
   return (
-    <div style={{ width: "100%", height: 300 }}>
-      <ResponsiveContainer>
+    <Paper shadow="xs" p="md" withBorder>
+      <Title order={4} mb="sm">
+        Simulations Completed Per Week
+      </Title>
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart data={exactCounts}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="weeks" />
@@ -108,14 +114,17 @@ export function DeliveryOddsBarChart({ data }: Props) {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-    </div>
+    </Paper>
   );
 }
 
 export function DeliveryOddsAreaChart({ data }: Props) {
   return (
-    <div style={{ width: "100%", height: 300, padding: "20px" }}>
-      <ResponsiveContainer>
+    <Paper shadow="xs" p="md" withBorder>
+      <Title order={4} mb="sm">
+        Cumulative Probability (Area)
+      </Title>
+      <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="weeks" />
@@ -132,6 +141,6 @@ export function DeliveryOddsAreaChart({ data }: Props) {
           <Area type="monotone" dataKey="p" stroke="#8884d8" fill="#8884d8" />
         </AreaChart>
       </ResponsiveContainer>
-    </div>
+    </Paper>
   );
 }
