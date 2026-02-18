@@ -36,8 +36,8 @@
 
 .status-row {
   position: relative;
-  min-height: 26px;
-  padding: 2px 2px;
+  min-height: 22px;
+  padding: 1px 2px;
 }
 
 .status-row__layer {
