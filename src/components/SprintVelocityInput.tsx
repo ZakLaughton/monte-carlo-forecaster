@@ -28,41 +28,45 @@ export const SprintVelocityInput = ({ velocities, onChange }: Props) => {
   };
 
   return (
-    <Stack gap="xs">
-      <Text fw={500}>Past Sprint Velocities</Text>
-      <Text size="sm" c="dimmed">
-        Enter the number of tickets completed in each past sprint.
+    <Stack gap={4}>
+      <Text fw={500} size="sm">
+        Past Sprint Velocities
       </Text>
 
-      <Group gap={6} align="flex-end">
-        {velocities.map((velocity, index) => (
-          <Stack key={index} gap={0} align="center">
-            <NumberInput
-              label={`S${index + 1}`}
-              value={velocity}
-              onChange={(value) => handleVelocityChange(index, value)}
-              min={0}
-              size="xs"
-              w={52}
-              hideControls
-              styles={{ label: { fontSize: 10 } }}
-            />
-            <ActionIcon
-              color="red"
-              variant="transparent"
-              size="xs"
-              onClick={() => removeSprint(index)}
-              disabled={velocities.length === 1}
-              aria-label={`Remove sprint ${index + 1}`}
-            >
-              ✕
-            </ActionIcon>
-          </Stack>
-        ))}
-        <Button variant="light" size="xs" onClick={addSprint}>
-          +
-        </Button>
-      </Group>
+      {velocities.map((velocity, index) => (
+        <Group key={index} gap="xs" wrap="nowrap">
+          <Text size="sm" w={70} style={{ flexShrink: 0 }}>
+            Sprint {index + 1}
+          </Text>
+          <NumberInput
+            value={velocity}
+            onChange={(value) => handleVelocityChange(index, value)}
+            min={0}
+            size="xs"
+            w={60}
+            hideControls
+          />
+          <ActionIcon
+            color="red"
+            variant="subtle"
+            size="sm"
+            onClick={() => removeSprint(index)}
+            disabled={velocities.length === 1}
+            aria-label={`Remove sprint ${index + 1}`}
+          >
+            ✕
+          </ActionIcon>
+        </Group>
+      ))}
+
+      <Button
+        variant="light"
+        size="compact-xs"
+        onClick={addSprint}
+        w="fit-content"
+      >
+        + Add sprint
+      </Button>
     </Stack>
   );
 };
