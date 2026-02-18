@@ -64,7 +64,7 @@ function App() {
     <Container size={960} py="md">
       <Stack gap="md">
         <Title order={4} ta="center" fw={500} c="dimmed">
-          Data-Driven Forecaster
+          Delivery Forecast
         </Title>
         <Grid gutter="md" align="flex-start">
           <Grid.Col span={{ base: 12, md: 5 }}>
