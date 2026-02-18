@@ -7,15 +7,7 @@ import {
 } from "recharts";
 import { BarChart, Bar } from "recharts";
 import { LabelList } from "recharts";
-import {
-  Table,
-  Paper,
-  Title,
-  Anchor,
-  Group,
-  Switch,
-  Collapse,
-} from "@mantine/core";
+import { Table, Paper, Title, Anchor } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 type Props = {
@@ -97,8 +89,6 @@ export function DeliveryOddsTable({ data }: Props) {
 }
 
 export function DeliveryOddsBarChart({ data }: Props) {
-  const [opened, { toggle }] = useDisclosure(false);
-
   // Transform data to calculate exact counts for each week
   const exactCounts = data.map((point, index) => {
     const previousCount = index > 0 ? data[index - 1].count : 0;
@@ -110,38 +100,25 @@ export function DeliveryOddsBarChart({ data }: Props) {
 
   return (
     <Paper shadow="xs" p="md" withBorder radius="md">
-      <Group justify="space-between">
-        <Title order={5}>Distribution Chart</Title>
-        <Switch
-          checked={opened}
-          onChange={toggle}
-          size="sm"
-          label={opened ? "Hide" : "Show"}
-          styles={{ label: { cursor: "pointer" } }}
-        />
-      </Group>
-      <Collapse in={opened}>
-        <ResponsiveContainer
-          width="100%"
-          height={300}
-          style={{ marginTop: 12 }}
-        >
-          <BarChart data={exactCounts}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="weeks" />
-            <YAxis tickFormatter={(v) => `${v}`} />
-            <Tooltip
-              formatter={(value?: number) =>
-                value == null ? "" : `${value} items`
-              }
-              labelFormatter={(label) => `Week ${label}`}
-            />
-            <Bar dataKey="count" fill="#8884d8">
-              <LabelList dataKey="count" position="top" />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </Collapse>
+      <Title order={5} mb="xs">
+        Distribution Chart
+      </Title>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={exactCounts}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="weeks" />
+          <YAxis tickFormatter={(v) => `${v}`} />
+          <Tooltip
+            formatter={(value?: number) =>
+              value == null ? "" : `${value} items`
+            }
+            labelFormatter={(label) => `Week ${label}`}
+          />
+          <Bar dataKey="count" fill="#8884d8">
+            <LabelList dataKey="count" position="top" />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
     </Paper>
   );
 }
