@@ -1,4 +1,6 @@
-import { Stack, Paper, Text } from "@mantine/core";
+import { Stack } from "@mantine/core";
+import { StatusCard } from "./StatusCard";
+import { Crossfade } from "./Crossfade";
 import { KeyOutcomes } from "./KeyOutcomes";
 import { DeliveryOddsTable, DeliveryOddsBarChart } from "./DeliveryOddsChart";
 import { ForecastResults } from "./ForecastResults";
@@ -7,28 +9,41 @@ import type { OddsByWeekPoint } from "../utils/stats";
 type Props = {
   oddsByWeek: OddsByWeekPoint[];
   simulationResults: number[];
+  isRunning: boolean;
+  hasResults: boolean;
 };
 
-export function ResultsPanel({ oddsByWeek, simulationResults }: Props) {
-  const hasResults = oddsByWeek.length > 0;
+export function ResultsPanel({
+  oddsByWeek,
+  simulationResults,
+  isRunning,
+  hasResults,
+}: Props) {
+  const statusState = isRunning ? "running" : hasResults ? "done" : "idle";
+  const revealed = hasResults && !isRunning;
 
   return (
     <Stack gap="md">
-      {!hasResults && (
-        <Paper p="lg" withBorder radius="md" ta="center">
-          <Text size="lg" fw={600} mb={4}>
-            Your forecast will appear here
-          </Text>
-          <Text size="sm" c="dimmed">
-            Enter your past weekly throughput and total remaining work, then hit
-            Run to see delivery predictions at different confidence levels.
-          </Text>
-        </Paper>
-      )}
-      <KeyOutcomes data={oddsByWeek} />
-      <DeliveryOddsTable data={oddsByWeek} />
-      <ForecastResults data={simulationResults} />
-      <DeliveryOddsBarChart data={oddsByWeek} />
+      <StatusCard state={statusState} />
+
+      <Crossfade revealed={revealed} skeleton={<KeyOutcomes data={[]} />}>
+        <KeyOutcomes data={oddsByWeek} />
+      </Crossfade>
+
+      <Crossfade revealed={revealed} skeleton={<DeliveryOddsTable data={[]} />}>
+        <DeliveryOddsTable data={oddsByWeek} />
+      </Crossfade>
+
+      <Crossfade revealed={revealed} skeleton={<ForecastResults data={[]} />}>
+        <ForecastResults data={simulationResults} />
+      </Crossfade>
+
+      <Crossfade
+        revealed={revealed}
+        skeleton={<DeliveryOddsBarChart data={[]} />}
+      >
+        <DeliveryOddsBarChart data={oddsByWeek} />
+      </Crossfade>
     </Stack>
   );
 }

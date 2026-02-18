@@ -4,9 +4,10 @@ import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
 
 type Props = {
   onRun: (velocities: number[], size: number) => void;
+  isRunning?: boolean;
 };
 
-export const SimulationForm = ({ onRun }: Props) => {
+export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
   const [weeklyThroughput, setWeeklyThroughput] = useState<(number | null)[]>([
     3, 5, 2, 4, 5, 4, 3,
   ]);
@@ -42,7 +43,11 @@ export const SimulationForm = ({ onRun }: Props) => {
           allowNegative={false}
           error={projectSize === null}
         />
-        <Button type="submit" disabled={!canRun}>
+        <Button
+          type="submit"
+          disabled={!canRun || isRunning}
+          loading={isRunning}
+        >
           Run simulation
         </Button>
       </Stack>
