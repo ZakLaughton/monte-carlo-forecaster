@@ -18,16 +18,16 @@ export const ForecastResults = ({ data }: ForecastResultsProps) => {
   return (
     <Paper p="xs" radius="md" withBorder style={{ borderStyle: "dashed" }}>
       <Group justify="space-between" gap="xs">
-        <Text size="xs" c="dimmed">
+        <Text size="xs" c="dark.1">
           {fmt(data.length > 0 ? data.length : null)} simulations
         </Text>
-        <Text size="xs" c="dimmed">
+        <Text size="xs" c="dark.1">
           Fastest: {fmt(min, "wk")}
         </Text>
-        <Text size="xs" c="dimmed">
+        <Text size="xs" c="dark.1">
           Slowest: {fmt(max, "wk")}
         </Text>
-        <Text size="xs" c="dimmed">
+        <Text size="xs" c="dark.1">
           Median: {fmt(median, "wk")}
         </Text>
       </Group>
