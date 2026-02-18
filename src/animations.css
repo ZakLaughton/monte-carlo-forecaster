@@ -1,10 +1,12 @@
 /* ── Crossfade transition system ─────────────────── */
 
 .crossfade {
-  position: relative;
+  display: grid;
 }
 
+/* Both layers occupy the same grid cell — taller one sets height */
 .crossfade__layer {
+  grid-area: 1 / 1;
   transition: opacity 200ms ease-out, transform 200ms ease-out;
 }
 
@@ -13,10 +15,6 @@
 }
 
 .crossfade__content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   opacity: 0;
   transform: translateY(3px);
   pointer-events: none;
