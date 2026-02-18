@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   NumberInput,
   Button,
@@ -8,6 +7,7 @@ import {
   Alert,
 } from "@mantine/core";
 import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
+import { useSimulationFormStorage } from "../hooks/useSimulationFormStorage";
 
 type Props = {
   onRun: (velocities: number[], size: number, startDate: string) => void;
@@ -15,13 +15,14 @@ type Props = {
 };
 
 export const SimulationForm = ({ onRun, isRunning = false }: Props) => {
-  const [weeklyThroughput, setWeeklyThroughput] = useState<(number | null)[]>([
-    null,
-  ]);
-  const [projectSize, setProjectSize] = useState<number | null>(null);
-  const [startDate, setStartDate] = useState(() =>
-    new Date().toISOString().slice(0, 10),
-  );
+  const {
+    weeklyThroughput,
+    projectSize,
+    startDate,
+    setWeeklyThroughput,
+    setProjectSize,
+    setStartDate,
+  } = useSimulationFormStorage();
 
   const validWeeksCount = weeklyThroughput.filter(
     (v) => v != null && v > 0,
