@@ -13,10 +13,9 @@ import {
 function App() {
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
 
-  const runSimulation = (velocityStr: string, projectSize: number) => {
-    const velocityHistory = velocityStr.split(",").map((num) => Number(num));
+  const runSimulation = (velocities: number[], projectSize: number) => {
     const simulatedLengths = simulateDeliveryWeeks({
-      velocityHistory,
+      velocityHistory: velocities,
       projectSize,
     });
 
