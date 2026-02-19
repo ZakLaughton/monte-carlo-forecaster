@@ -83,7 +83,7 @@ export const SimulationForm = ({
           onChange={setWeeklyThroughput}
         />
         <NumberInput
-          label="Total remaining work items"
+          label="Total Remaining Work Items"
           value={projectSize ?? ""}
           placeholder="e.g. 20"
           onChange={(val) =>
@@ -94,7 +94,7 @@ export const SimulationForm = ({
           allowNegative={false}
         />
         <TextInput
-          label="Forecast start date"
+          label="Forecast Start Date"
           type="date"
           value={startDate}
           onChange={(event) => setStartDate(event.currentTarget.value)}
