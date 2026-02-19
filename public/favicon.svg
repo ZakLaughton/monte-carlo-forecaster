@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Delivery Forecast favicon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e2230" />
+      <stop offset="100%" stop-color="#2f3650" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7b79b4" />
+      <stop offset="100%" stop-color="#74c0fc" />
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bg)" />
+
+  <path d="M14 48H50" stroke="#5b6379" stroke-width="4" stroke-linecap="round" />
+
+  <rect x="16" y="34" width="7" height="14" rx="2" fill="#545d77" />
+  <rect x="27" y="28" width="7" height="20" rx="2" fill="#606b88" />
+  <rect x="38" y="21" width="7" height="27" rx="2" fill="#6f7ca0" />
+
+  <path
+    d="M15 40 L26 33 L35 36 L48 20"
+    fill="none"
+    stroke="url(#accent)"
+    stroke-width="5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <circle cx="48" cy="20" r="4" fill="#74c0fc" />
+</svg>
