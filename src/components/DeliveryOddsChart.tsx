@@ -123,7 +123,7 @@ export function DeliveryOddsBarChart({ data }: Props) {
           />
           <Tooltip
             formatter={(value?: number) =>
-              value == null ? "" : `${value} items`
+              value == null ? "" : `${value.toLocaleString()} simulations`
             }
             labelFormatter={(label) => `Week ${label}`}
           />
