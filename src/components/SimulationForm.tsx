@@ -133,12 +133,13 @@ export const SimulationForm = ({
         )}
         {validWeeksCount === 3 && (
           <Alert variant="light" color="blue" title="Medium confidence">
-            3 weeks is workable, but 4–6 weeks is more reliable.
+            3 weeks is workable, but 4–6 historical weeks is more reliable.
           </Alert>
         )}
         {!canRun && !isRunning && (
           <Text size="xs" c="dimmed">
-            Enter remaining work and at least one completed week.
+            Add at least one historical week and remaining work to run the
+            forecast.
           </Text>
         )}
       </Stack>

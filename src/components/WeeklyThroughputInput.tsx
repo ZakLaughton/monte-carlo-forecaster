@@ -59,34 +59,10 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
           <Text fw={500} size="sm">
             Completed Work Items
           </Text>
-          <Tooltip
-            label={
-              <>
-                A work item is any completed unit in your tracker (ticket,
-                issue, bug, task, story). A work item is any completed unit in
-                your tracker (ticket, issue, bug, task, story, etc.).
-                <br />
-                Use consistent counting rules for both historical throughput and
-                remaining work.
-              </>
-            }
-            multiline
-            w={320}
-            withArrow
-          >
-            <ActionIcon
-              size="xs"
-              variant="subtle"
-              color="gray"
-              aria-label="Work item definition"
-            >
-              i
-            </ActionIcon>
-          </Tooltip>
         </Group>
         <Text size="xs" c="dimmed">
           Count completed units (ticket, issue, bug, task, story, etc.) using
-          consistent rules. Add 4–6 historical weeks for more reliable results.
+          consistent rules.
         </Text>
       </div>
 
