@@ -143,9 +143,12 @@ export function DeliveryOddsBarChart({ data }: Props) {
           />
           <Tooltip
             formatter={(value?: number) =>
-              value == null ? "" : `${value.toLocaleString()} simulations`
+              value == null
+                ? ["", ""]
+                : [`${value.toLocaleString()} simulations`, ""]
             }
             labelFormatter={(label) => `Week ${label}`}
+            separator=""
           />
           <Bar dataKey="count" fill="#7b79b4">
             <LabelList
