@@ -6,6 +6,7 @@ import {
   Text,
   Alert,
   Group,
+  Grid,
 } from "@mantine/core";
 import { WeeklyThroughputInput } from "./WeeklyThroughputInput";
 import {
@@ -82,24 +83,30 @@ export const SimulationForm = ({
           velocities={weeklyThroughput}
           onChange={setWeeklyThroughput}
         />
-        <NumberInput
-          label="Total Remaining Work Items"
-          value={projectSize ?? ""}
-          placeholder="e.g. 20"
-          onChange={(val) =>
-            setProjectSize(typeof val === "number" ? val : null)
-          }
-          min={1}
-          allowDecimal={false}
-          allowNegative={false}
-        />
-        <TextInput
-          label="Forecast Start Date"
-          type="date"
-          value={startDate}
-          onChange={(event) => setStartDate(event.currentTarget.value)}
-          error={!startDateValid}
-        />
+        <Grid gutter="sm">
+          <Grid.Col span={{ base: 12, sm: 6 }}>
+            <NumberInput
+              label="Remaining Work Items"
+              value={projectSize ?? ""}
+              placeholder="e.g. 20"
+              onChange={(val) =>
+                setProjectSize(typeof val === "number" ? val : null)
+              }
+              min={1}
+              allowDecimal={false}
+              allowNegative={false}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, sm: 6 }}>
+            <TextInput
+              label="Forecast Start Date"
+              type="date"
+              value={startDate}
+              onChange={(event) => setStartDate(event.currentTarget.value)}
+              error={!startDateValid}
+            />
+          </Grid.Col>
+        </Grid>
         <Group gap="xs" grow>
           <Button
             type="submit"
