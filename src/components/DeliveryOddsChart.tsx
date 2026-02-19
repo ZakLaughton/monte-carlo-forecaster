@@ -7,7 +7,7 @@ import {
 } from "recharts";
 import { BarChart, Bar } from "recharts";
 import { LabelList } from "recharts";
-import { Table, Paper, Title, Anchor } from "@mantine/core";
+import { Table, Paper, Title, Anchor, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { toCompletionDate } from "../utils/dates";
 
@@ -113,13 +113,33 @@ export function DeliveryOddsBarChart({ data }: Props) {
       <Title order={5} mb="xs">
         Distribution Chart
       </Title>
+      <Text size="xs" c="dimmed" mb="xs">
+        Simulation outcomes by completion week
+      </Text>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={exactCounts}>
           <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-          <XAxis dataKey="weeks" tick={{ fill: "#999", fontSize: 12 }} />
+          <XAxis
+            dataKey="weeks"
+            tick={{ fill: "#999", fontSize: 12 }}
+            label={{
+              value: "Completion week",
+              position: "insideBottom",
+              offset: -2,
+              fill: "#999",
+              fontSize: 11,
+            }}
+          />
           <YAxis
             tickFormatter={(v) => `${v}`}
             tick={{ fill: "#999", fontSize: 12 }}
+            label={{
+              value: "Simulations",
+              angle: -90,
+              position: "insideLeft",
+              fill: "#999",
+              fontSize: 11,
+            }}
           />
           <Tooltip
             formatter={(value?: number) =>
