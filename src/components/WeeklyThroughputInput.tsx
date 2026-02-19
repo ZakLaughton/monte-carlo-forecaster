@@ -6,6 +6,7 @@ import {
   Group,
   ActionIcon,
   Text,
+  Tooltip,
 } from "@mantine/core";
 
 type Props = {
@@ -54,13 +55,38 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
   return (
     <Stack gap={6}>
       <div>
-        <Text fw={500} size="sm">
-          Completed Work Items
-        </Text>
+        <Group gap={6} align="center" wrap="nowrap">
+          <Text fw={500} size="sm">
+            Completed Work Items
+          </Text>
+          <Tooltip
+            label={
+              <>
+                A work item is any completed unit in your tracker (ticket,
+                issue, bug, task, story). A work item is any completed unit in
+                your tracker (ticket, issue, bug, task, story, etc.).
+                <br />
+                Use consistent counting rules for both historical throughput and
+                remaining work.
+              </>
+            }
+            multiline
+            w={320}
+            withArrow
+          >
+            <ActionIcon
+              size="xs"
+              variant="subtle"
+              color="gray"
+              aria-label="Work item definition"
+            >
+              i
+            </ActionIcon>
+          </Tooltip>
+        </Group>
         <Text size="xs" c="dimmed">
-          A work item is one completed unit in your tracker (for example: Jira
-          ticket, GitHub issue, bug fix, task, or story). Use the same item type
-          for historical throughput and remaining work.
+          Count completed units (ticket, issue, bug, task, story, etc.) using
+          consistent rules. Add 4–6 historical weeks for more reliable results.
         </Text>
       </div>
 
