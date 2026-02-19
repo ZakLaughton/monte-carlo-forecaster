@@ -6,7 +6,6 @@ import {
   Group,
   ActionIcon,
   Text,
-  Tooltip,
 } from "@mantine/core";
 
 type Props = {
