@@ -16,3 +16,11 @@ Tech Stack Experiments:
 - **Preview production build:** `npm run preview`
 - **Run ESLint:** `npm run lint`
 - **Run tests:** `npm test`
+
+## Plausible Analytics
+
+Analytics is initialized in `src/main.tsx` using `@plausible-analytics/tracker`.
+
+- Tracking runs **only in production** (`import.meta.env.PROD`)
+- Tracking is explicitly disabled on localhost (`captureOnLocalhost: false`)
+- Domain is hardcoded to `forecaster.zaklaughton.dev`
