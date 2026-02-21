@@ -1,6 +1,15 @@
 import { simulateDeliveryWeeks } from "../monte-carlo";
 
 describe("simulateDeliveryWeeks", () => {
+  it("returns empty array if all velocities are zero", () => {
+    expect(
+      simulateDeliveryWeeks({
+        velocityHistory: [0, 0, 0],
+        projectSize: 10,
+        iterationCount: 3,
+      }),
+    ).toEqual([]);
+  });
   it("returns empty array for projectSize <= 0", () => {
     expect(
       simulateDeliveryWeeks({ velocityHistory: [1, 2, 3], projectSize: 0 }),

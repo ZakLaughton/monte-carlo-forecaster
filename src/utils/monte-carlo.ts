@@ -18,6 +18,7 @@ export const simulateDeliveryWeeks = ({
 }: SimulateDeliveryWeeksProps): number[] => {
   if (projectSize <= 0) return [];
   if (velocityHistory.length === 0) return [];
+  if (velocityHistory.every(v => v === 0)) return [];
 
   const results: number[] = [];
   for (let i = 0; i < iterationCount; i++) {
