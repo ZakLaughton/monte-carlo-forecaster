@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../../test-utils";
 import { SimulationForm } from "../SimulationForm";
 
 it("renders form and disables run button when empty", () => {
