@@ -17,6 +17,23 @@ Tech Stack Experiments:
 - **Run ESLint:** `npm run lint`
 - **Run tests:** `npm test`
 
+## Testing & Coverage
+
+Jest and React Testing Library are used for unit and UI tests.
+
+- **Run all tests:** `npm test`
+- **Run a single file:** `npm test src/components/__tests__/SimulationForm.test.tsx`
+- **Run only changed files:** `npm test -- --onlyChanged`
+
+Coverage reports are output to the `coverage/` directory.
+
+To view coverage in your browser:
+
+- After running tests, open `coverage/lcov-report/index.html` in your browser.
+- Or use the script below for convenience.
+
+**Open coverage report:** `npm run coverage:open`
+
 ## Plausible Analytics
 
 Analytics is initialized in `src/main.tsx` using `@plausible-analytics/tracker`.

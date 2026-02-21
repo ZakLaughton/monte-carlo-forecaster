@@ -1,3 +1,5 @@
+# Coverage reports
+coverage/
 # Logs
 logs
 *.log
