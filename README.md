@@ -27,6 +27,13 @@ Jest and React Testing Library are used for unit and UI tests.
 
 Coverage reports are output to the `coverage/` directory.
 
+To view coverage in your browser:
+
+- After running tests, open `coverage/lcov-report/index.html` in your browser.
+- Or use the script below for convenience.
+
+**Open coverage report:** `npm run coverage:open`
+
 ## Plausible Analytics
 
 Analytics is initialized in `src/main.tsx` using `@plausible-analytics/tracker`.
