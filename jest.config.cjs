@@ -8,4 +8,5 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageReporters: ["text", "lcov"],
+  collectCoverageFrom: ["src/components/**/*.tsx", "src/utils/**/*.ts"],
 };
