@@ -200,7 +200,6 @@ describe("SimulationForm", () => {
     });
   });
 
-  it.todo("resets form and results when requested");
   it("resets form and results when requested", async () => {
     // Mock window.confirm to always return true
     jest.spyOn(window, "confirm").mockImplementation(() => true);
