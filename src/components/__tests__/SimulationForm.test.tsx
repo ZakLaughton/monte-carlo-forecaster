@@ -47,6 +47,34 @@ describe("SimulationForm", () => {
     expect(remainingInput).toHaveValue("15");
   });
 
+  it("submits form and triggers simulation", async () => {
+    const onRun = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <SimulationForm onRun={onRun} onReset={jest.fn()} isRunning={false} />,
+    );
+
+    // Enter valid values
+    const weekInput = screen.getByLabelText("Week 1");
+    await user.clear(weekInput);
+    await user.type(weekInput, "5");
+
+    const remainingInput = screen.getByLabelText("Remaining Work Items");
+    await user.clear(remainingInput);
+    await user.type(remainingInput, "10");
+
+    const startDateInput = screen.getByLabelText("Forecast Start Date");
+    await user.clear(startDateInput);
+    await user.type(startDateInput, "2026-02-21");
+
+    // Submit the form
+    const runButton = screen.getByRole("button", { name: /Run simulation/i });
+    await user.click(runButton);
+
+    // Assert that onRun was called with expected values
+    expect(onRun).toHaveBeenCalledWith([5], 10, "2026-02-21");
+  });
+
   describe("SimulationForm invalid input", () => {
     it("disables run button and shows error for zero project size", async () => {
       const user = userEvent.setup();
@@ -121,7 +149,6 @@ describe("SimulationForm", () => {
     });
   });
 
-  it.todo("submits form and triggers simulation");
   it.todo("displays loading or skeleton while simulating");
   it.todo("shows simulation results after completion");
   it.todo("handles edge cases (e.g., empty input, zero velocity)");
