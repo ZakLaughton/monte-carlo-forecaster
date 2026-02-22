@@ -40,7 +40,7 @@ export const SimulationForm = ({
   ).length;
   const hasAtLeastOneWeek = validWeeksCount >= 1;
   const projectSizeValid =
-    projectSize != null && projectSize > 0 && Number.isInteger(projectSize);
+    projectSize != null && Number.isInteger(projectSize) && projectSize >= 1;
   const startDateValid = startDate.trim().length > 0;
   const canRun = hasAtLeastOneWeek && projectSizeValid && startDateValid;
 
@@ -90,7 +90,7 @@ export const SimulationForm = ({
               value={projectSize ?? ""}
               placeholder="e.g. 20"
               onChange={(val) =>
-                setProjectSize(typeof val === "number" ? val : null)
+                setProjectSize(typeof val === "number" && val >= 1 ? val : null)
               }
               min={1}
               allowDecimal={false}

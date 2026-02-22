@@ -68,10 +68,13 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
       <Stack gap={4}>
         {velocities.map((velocity, index) => (
           <Group key={index} gap="xs" wrap="nowrap" align="center">
-            <Text size="sm" w={70} style={{ flexShrink: 0 }}>
-              Week {index + 1}
-            </Text>
+            <label htmlFor={`week-input-${index}`} style={{ flexShrink: 0 }}>
+              <Text size="sm" w={70}>
+                Week {index + 1}
+              </Text>
+            </label>
             <NumberInput
+              id={`week-input-${index}`}
               ref={(el) => {
                 inputRefs.current[index] = el as unknown as HTMLInputElement;
               }}
