@@ -74,6 +74,17 @@ describe("SimulationForm", () => {
     expect(onRun).toHaveBeenCalledWith([5], 10, "2026-02-21");
   });
 
+  it("displays loading or skeleton while simulating", async () => {
+    render(
+      <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={true} />,
+    );
+
+    // The run button should show loading state
+    const runButton = screen.getByRole("button", { name: /Run simulation/i });
+    expect(runButton).toHaveAttribute("data-loading", "true");
+    expect(runButton).toBeDisabled();
+  });
+
   describe("SimulationForm invalid input", () => {
     it("disables run button and shows error for zero project size", async () => {
       const user = userEvent.setup();
@@ -147,7 +158,6 @@ describe("SimulationForm", () => {
     });
   });
 
-  it.todo("displays loading or skeleton while simulating");
   it.todo("shows simulation results after completion");
   it.todo("handles edge cases (e.g., empty input, zero velocity)");
   it.todo(
