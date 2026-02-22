@@ -1,3 +1,7 @@
+import { render, screen } from "../../test-utils";
+import { SimulationForm } from "../SimulationForm";
+import userEvent from "@testing-library/user-event";
+
 async function fillWeeklyThroughput(
   user: ReturnType<typeof userEvent.setup>,
   values: number[],
@@ -9,9 +13,6 @@ async function fillWeeklyThroughput(
     await user.type(screen.getByLabelText(`Week ${i + 1}`), String(values[i]));
   }
 }
-import { render, screen } from "../../test-utils";
-import { SimulationForm } from "../SimulationForm";
-import userEvent from "@testing-library/user-event";
 
 beforeEach(() => {
   localStorage.clear();
@@ -99,7 +100,6 @@ describe("SimulationForm", () => {
     );
 
     await fillWeeklyThroughput(user, [5]);
-    const weekInput = screen.getByLabelText("Week 1");
 
     const remainingInput = screen.getByLabelText("Remaining Work Items");
     await user.type(remainingInput, "10");
