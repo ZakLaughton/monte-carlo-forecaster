@@ -200,6 +200,25 @@ describe("SimulationForm", () => {
     });
   });
 
+  it("does not reset when the user cancels the confirm dialog", async () => {
+    jest.spyOn(window, "confirm").mockImplementation(() => false);
+    const onReset = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <SimulationForm onRun={jest.fn()} onReset={onReset} isRunning={false} />,
+    );
+
+    await user.type(screen.getByLabelText("Week 1"), "5");
+    await user.type(screen.getByLabelText("Remaining Work Items"), "10");
+
+    await user.click(screen.getByRole("button", { name: /reset/i }));
+
+    // confirm returned false — form and callback should be untouched
+    expect(onReset).not.toHaveBeenCalled();
+    expect(screen.getByLabelText("Week 1")).toHaveValue("5");
+    expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("10");
+  });
+
   it("resets form and results when requested", async () => {
     // Mock window.confirm to always return true
     jest.spyOn(window, "confirm").mockImplementation(() => true);
