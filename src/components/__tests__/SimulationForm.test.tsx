@@ -2,6 +2,10 @@ import { render, screen } from "../../test-utils";
 import { SimulationForm } from "../SimulationForm";
 import userEvent from "@testing-library/user-event";
 
+beforeEach(() => {
+  localStorage.clear();
+});
+
 it("renders form and disables run button when empty", () => {
   render(
     <SimulationForm onRun={() => {}} onReset={() => {}} isRunning={false} />,
@@ -53,11 +57,9 @@ describe("SimulationForm", () => {
 
     // Enter valid values
     const weekInput = screen.getByLabelText("Week 1");
-    await user.clear(weekInput);
     await user.type(weekInput, "5");
 
     const remainingInput = screen.getByLabelText("Remaining Work Items");
-    await user.clear(remainingInput);
     await user.type(remainingInput, "10");
 
     const startDateInput = screen.getByLabelText("Forecast Start Date");
@@ -84,7 +86,6 @@ describe("SimulationForm", () => {
       );
 
       const remainingInput = screen.getByLabelText("Remaining Work Items");
-      await user.clear(remainingInput);
       await user.type(remainingInput, "0");
 
       const runButton = screen.getByRole("button", { name: /Run simulation/i });
