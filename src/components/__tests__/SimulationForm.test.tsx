@@ -159,4 +159,44 @@ describe("SimulationForm", () => {
   });
 
   it.todo("resets form and results when requested");
+  it("resets form and results when requested", async () => {
+    // Mock window.confirm to always return true
+    jest.spyOn(window, "confirm").mockImplementation(() => true);
+    const onRun = jest.fn();
+    const onReset = jest.fn();
+    const user = userEvent.setup();
+    render(
+      <SimulationForm onRun={onRun} onReset={onReset} isRunning={false} />,
+    );
+
+    // Fill out form
+    const weekInput = screen.getByLabelText("Week 1");
+    await user.type(weekInput, "5");
+    const remainingInput = screen.getByLabelText("Remaining Work Items");
+    await user.type(remainingInput, "10");
+    const startDateInput = screen.getByLabelText("Forecast Start Date");
+    await user.clear(startDateInput);
+    await user.type(startDateInput, "2026-02-21");
+
+    // Simulate run
+    const runButton = screen.getByRole("button", { name: /Run simulation/i });
+    await user.click(runButton);
+    expect(onRun).toHaveBeenCalled();
+
+    // Simulate reset
+    const resetButton = screen.getByRole("button", { name: /Reset/i });
+    await user.click(resetButton);
+    expect(onReset).toHaveBeenCalled();
+
+    // Form fields should be reset
+    expect(weekInput).toHaveValue("");
+    expect(remainingInput).toHaveValue("");
+    // The start date resets to the default (today)
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const expectedDate = `${yyyy}-${mm}-${dd}`;
+    expect(startDateInput).toHaveValue(expectedDate);
+  });
 });
