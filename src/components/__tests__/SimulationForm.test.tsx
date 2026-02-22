@@ -158,10 +158,5 @@ describe("SimulationForm", () => {
     });
   });
 
-  it.todo("shows simulation results after completion");
-  it.todo("handles edge cases (e.g., empty input, zero velocity)");
-  it.todo(
-    "integrates with child components (WeeklyThroughputInput, DeliveryOddsChart, etc.)",
-  );
   it.todo("resets form and results when requested");
 });
