@@ -20,16 +20,15 @@ export function toCompletionDate(
 }
 
 /**
- * Formats a Date object as "Mon DD, YYYY" in the user's locale.
+ * Formats a Date object as "Mon DD" within the current year, or "Mon DD, YYYY"
+ * when the date falls in a different year.
  */
-const COMPLETION_DATE_FORMAT: Intl.DateTimeFormatOptions = {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-};
-
 function formatCompletionDate(date: Date): string {
-  return new Intl.DateTimeFormat(undefined, COMPLETION_DATE_FORMAT).format(
-    date,
-  );
+  const includeYear = date.getFullYear() !== new Date().getFullYear();
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+    ...(includeYear ? { year: "numeric" } : {}),
+  };
+  return new Intl.DateTimeFormat(undefined, options).format(date);
 }

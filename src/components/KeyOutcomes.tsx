@@ -28,7 +28,7 @@ function OutcomeMetric({
   isPlaceholder = false,
 }: Outcome & { startDate?: string; isPlaceholder?: boolean }) {
   const weeksText =
-    weeks != null ? `${weeks} ${weeks === 1 ? "week" : "weeks"}` : "— weeks";
+    weeks != null ? `${weeks} ${weeks === 1 ? "week" : "weeks"}` : "—";
   const completionDate =
     weeks != null && startDate ? toCompletionDate(startDate, weeks) : null;
 
@@ -36,8 +36,9 @@ function OutcomeMetric({
     <Stack gap={2} align="center">
       <Text
         fw={700}
-        fz={28}
+        fz={completionDate != null ? 22 : 28}
         lh={1.1}
+        ta="center"
         c={weeks == null ? "dimmed" : undefined}
         style={
           isPlaceholder
@@ -50,16 +51,18 @@ function OutcomeMetric({
             : undefined
         }
       >
-        {weeksText}
+        {completionDate ?? "—"}
       </Text>
+      {completionDate && (
+        <Text c="dimmed" fz="xs" ta="center">
+          in {weeksText}
+        </Text>
+      )}
       <Text fw={600} fz="sm" c={isPlaceholder ? "dimmed" : undefined}>
         {label}
       </Text>
       <Text c="dimmed" fz="xs">
         {sublabel}
-      </Text>
-      <Text c="dimmed" fz="xs">
-        {completionDate ?? ""}
       </Text>
     </Stack>
   );
