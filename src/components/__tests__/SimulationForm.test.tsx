@@ -1,3 +1,14 @@
+async function fillWeeklyThroughput(
+  user: ReturnType<typeof userEvent.setup>,
+  values: number[],
+) {
+  for (let i = 0; i < values.length; i++) {
+    if (i > 0) {
+      await user.click(screen.getByRole("button", { name: /add week/i }));
+    }
+    await user.type(screen.getByLabelText(`Week ${i + 1}`), String(values[i]));
+  }
+}
 import { render, screen } from "../../test-utils";
 import { SimulationForm } from "../SimulationForm";
 import userEvent from "@testing-library/user-event";
@@ -17,54 +28,50 @@ it("renders form and disables run button when empty", () => {
 });
 
 describe("SimulationForm", () => {
-    describe("confidence alerts", () => {
-      it("shows low confidence alert for 1 valid week", async () => {
-        const user = userEvent.setup();
-        render(
-          <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />
-        );
-        const weekInput = screen.getByLabelText("Week 1");
-        await user.type(weekInput, "5");
-        expect(screen.getByText(/low confidence/i)).toBeInTheDocument();
-        expect(screen.getByText(/results can swing a lot/i)).toBeInTheDocument();
-      });
-
-      it("shows low confidence alert for 2 valid weeks", async () => {
-        const user = userEvent.setup();
-        render(
-          <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />
-        );
-        const weekInput1 = screen.getByLabelText("Week 1");
-        await user.type(weekInput1, "5");
-        // Add Week 2
-        const addWeekButton = screen.getByRole("button", { name: /add week/i });
-        await user.click(addWeekButton);
-        const weekInput2 = screen.getByLabelText("Week 2");
-        await user.type(weekInput2, "6");
-        expect(screen.getByText(/low confidence/i)).toBeInTheDocument();
-        expect(screen.getByText(/results can swing a lot/i)).toBeInTheDocument();
-      });
-
-      it("shows medium confidence alert for 3 valid weeks", async () => {
-        const user = userEvent.setup();
-        render(
-          <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />
-        );
-        const weekInput1 = screen.getByLabelText("Week 1");
-        await user.type(weekInput1, "5");
-        // Add Week 2
-        const addWeekButton = screen.getByRole("button", { name: /add week/i });
-        await user.click(addWeekButton);
-        const weekInput2 = screen.getByLabelText("Week 2");
-        await user.type(weekInput2, "6");
-        // Add Week 3
-        await user.click(addWeekButton);
-        const weekInput3 = screen.getByLabelText("Week 3");
-        await user.type(weekInput3, "7");
-        expect(screen.getByText(/medium confidence/i)).toBeInTheDocument();
-        expect(screen.getByText(/3 weeks is workable/i)).toBeInTheDocument();
-      });
+  describe("confidence alerts", () => {
+    it("shows low confidence alert for 1 valid week", async () => {
+      const user = userEvent.setup();
+      render(
+        <SimulationForm
+          onRun={jest.fn()}
+          onReset={jest.fn()}
+          isRunning={false}
+        />,
+      );
+      await fillWeeklyThroughput(user, [5]);
+      expect(screen.getByText(/low confidence/i)).toBeInTheDocument();
+      expect(screen.getByText(/results can swing a lot/i)).toBeInTheDocument();
     });
+
+    it("shows low confidence alert for 2 valid weeks", async () => {
+      const user = userEvent.setup();
+      render(
+        <SimulationForm
+          onRun={jest.fn()}
+          onReset={jest.fn()}
+          isRunning={false}
+        />,
+      );
+      await fillWeeklyThroughput(user, [5, 6]);
+      expect(screen.getByText(/low confidence/i)).toBeInTheDocument();
+      expect(screen.getByText(/results can swing a lot/i)).toBeInTheDocument();
+    });
+
+    it("shows medium confidence alert for 3 valid weeks", async () => {
+      const user = userEvent.setup();
+      render(
+        <SimulationForm
+          onRun={jest.fn()}
+          onReset={jest.fn()}
+          isRunning={false}
+        />,
+      );
+      await fillWeeklyThroughput(user, [5, 6, 7]);
+      expect(screen.getByText(/medium confidence/i)).toBeInTheDocument();
+      expect(screen.getByText(/3 weeks is workable/i)).toBeInTheDocument();
+    });
+  });
+
   it("renders initial form state", () => {
     render(
       <SimulationForm onRun={() => {}} onReset={() => {}} isRunning={false} />,
@@ -85,12 +92,10 @@ describe("SimulationForm", () => {
       />,
     );
 
-    // Enter a value for Week 1
+    await fillWeeklyThroughput(user, [4]);
     const weekInput = screen.getByLabelText("Week 1");
-    await user.type(weekInput, "4");
     expect(weekInput).toHaveValue("4");
 
-    // Enter a value for Remaining Work Items
     const remainingInput = screen.getByLabelText("Remaining Work Items");
     await user.type(remainingInput, "15");
     expect(remainingInput).toHaveValue("15");
@@ -103,9 +108,8 @@ describe("SimulationForm", () => {
       <SimulationForm onRun={onRun} onReset={jest.fn()} isRunning={false} />,
     );
 
-    // Enter valid values
+    await fillWeeklyThroughput(user, [5]);
     const weekInput = screen.getByLabelText("Week 1");
-    await user.type(weekInput, "5");
 
     const remainingInput = screen.getByLabelText("Remaining Work Items");
     await user.type(remainingInput, "10");
