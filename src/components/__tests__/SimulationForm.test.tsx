@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "../../test-utils";
 import { SimulationForm } from "../SimulationForm";
 import userEvent from "@testing-library/user-event";
