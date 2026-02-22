@@ -216,9 +216,41 @@ describe("App", () => {
   });
 
   describe("localStorage persistence", () => {
-    it.todo("form values are restored from localStorage when the app mounts");
-    it.todo(
-      "form values written during a session are available after remounting the component",
-    );
+    it("form values are restored from localStorage when the app mounts", () => {
+      // Seed storage before the component mounts so loadInitialState picks it up
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({
+          weeklyThroughput: [7, 8],
+          projectSize: 25,
+          startDate: "2026-03-01",
+        }),
+      );
+
+      render(<App />);
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("7");
+      expect(screen.getByLabelText("Week 2")).toHaveValue("8");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("25");
+      expect(screen.getByLabelText("Forecast Start Date")).toHaveValue(
+        "2026-03-01",
+      );
+    });
+
+    it("form values written during a session are available after remounting the component", async () => {
+      const user = userEvent.setup({ delay: null });
+      const { unmount } = render(<App />);
+
+      // Each keypress flushes the useEffect that writes to localStorage,
+      // so storage is up to date before we unmount
+      await user.type(screen.getByLabelText("Week 1"), "6");
+      await user.type(screen.getByLabelText("Remaining Work Items"), "20");
+
+      unmount();
+      render(<App />);
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("6");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("20");
+    });
   });
 });
