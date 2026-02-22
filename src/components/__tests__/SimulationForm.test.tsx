@@ -35,13 +35,11 @@ describe("SimulationForm", () => {
 
     // Enter a value for Week 1
     const weekInput = screen.getByLabelText("Week 1");
-    await user.clear(weekInput);
     await user.type(weekInput, "4");
     expect(weekInput).toHaveValue("4");
 
     // Enter a value for Remaining Work Items
     const remainingInput = screen.getByLabelText("Remaining Work Items");
-    await user.clear(remainingInput);
     await user.type(remainingInput, "15");
     expect(remainingInput).toHaveValue("15");
   });
