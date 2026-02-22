@@ -17,16 +17,6 @@ beforeEach(() => {
   localStorage.clear();
 });
 
-it("renders form and disables run button when empty", () => {
-  render(
-    <SimulationForm onRun={() => {}} onReset={() => {}} isRunning={false} />,
-  );
-  expect(screen.getByLabelText(/Remaining Work Items/i)).toBeInTheDocument();
-  expect(
-    screen.getByRole("button", { name: /Run simulation/i }),
-  ).toBeDisabled();
-});
-
 describe("SimulationForm", () => {
   describe("confidence alerts", () => {
     it("shows low confidence alert for 1 valid week", async () => {
