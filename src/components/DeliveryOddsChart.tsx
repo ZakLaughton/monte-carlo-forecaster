@@ -68,7 +68,7 @@ export function DeliveryOddsTable({ data, startDate = "" }: Props) {
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th ta="center">Confidence</Table.Th>
+            <Table.Th ta="center">Likelihood</Table.Th>
             <Table.Th ta="center">Finish by</Table.Th>
           </Table.Tr>
         </Table.Thead>
