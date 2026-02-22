@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "../../test-utils";
 import { SimulationForm } from "../SimulationForm";
+import userEvent from "@testing-library/user-event";
 
 it("renders form and disables run button when empty", () => {
   render(
@@ -23,7 +24,29 @@ describe("SimulationForm", () => {
     ).toBeDisabled();
   });
 
-  it.todo("accepts user input for project size and velocity");
+  it("accepts user input for completed work items and remaining work", async () => {
+    const user = userEvent.setup();
+    render(
+      <SimulationForm
+        onRun={jest.fn()}
+        onReset={jest.fn()}
+        isRunning={false}
+      />,
+    );
+
+    // Enter a value for Week 1
+    const weekInput = screen.getByLabelText("Week 1");
+    await user.clear(weekInput);
+    await user.type(weekInput, "4");
+    expect(weekInput).toHaveValue("4");
+
+    // Enter a value for Remaining Work Items
+    const remainingInput = screen.getByLabelText("Remaining Work Items");
+    await user.clear(remainingInput);
+    await user.type(remainingInput, "15");
+    expect(remainingInput).toHaveValue("15");
+  });
+
   it.todo("validates input and shows errors");
   it.todo("submits form and triggers simulation");
   it.todo("displays loading or skeleton while simulating");
