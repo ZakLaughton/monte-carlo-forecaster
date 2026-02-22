@@ -47,32 +47,78 @@ describe("SimulationForm", () => {
     expect(remainingInput).toHaveValue("15");
   });
 
-  it("disables run button and shows error for zero project size", async () => {
-    const user = userEvent.setup();
-    render(
-      <SimulationForm
-        onRun={jest.fn()}
-        onReset={jest.fn()}
-        isRunning={false}
-      />,
-    );
+  describe("SimulationForm invalid input", () => {
+    it("disables run button and shows error for zero project size", async () => {
+      const user = userEvent.setup();
+      render(
+        <SimulationForm
+          onRun={jest.fn()}
+          onReset={jest.fn()}
+          isRunning={false}
+        />,
+      );
 
-    // Enter zero value (invalid)
-    const remainingInput = screen.getByLabelText("Remaining Work Items");
-    await user.clear(remainingInput);
-    await user.type(remainingInput, "0");
+      const remainingInput = screen.getByLabelText("Remaining Work Items");
+      await user.clear(remainingInput);
+      await user.type(remainingInput, "0");
 
-    // Try to submit the form
-    const runButton = screen.getByRole("button", { name: /Run simulation/i });
-    await user.click(runButton);
+      const runButton = screen.getByRole("button", { name: /Run simulation/i });
+      await user.click(runButton);
+      expect(runButton).toBeDisabled();
+      expect(
+        screen.getByText(
+          /add at least one historical week and remaining work/i,
+        ),
+      ).toBeInTheDocument();
+    });
 
-    // Assert that button remains disabled
-    expect(runButton).toBeDisabled();
+    it("disables run button and shows error for empty project size", async () => {
+      const user = userEvent.setup();
+      render(
+        <SimulationForm
+          onRun={jest.fn()}
+          onReset={jest.fn()}
+          isRunning={false}
+        />,
+      );
 
-    // Check for error/help message
-    expect(
-      screen.getByText(/add at least one historical week and remaining work/i),
-    ).toBeInTheDocument();
+      const remainingInput = screen.getByLabelText("Remaining Work Items");
+      await user.clear(remainingInput);
+      // Input is now empty
+
+      const runButton = screen.getByRole("button", { name: /Run simulation/i });
+      await user.click(runButton);
+      expect(runButton).toBeDisabled();
+      expect(
+        screen.getByText(
+          /add at least one historical week and remaining work/i,
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("disables run button and shows error for missing weekly throughput", async () => {
+      const user = userEvent.setup();
+      render(
+        <SimulationForm
+          onRun={jest.fn()}
+          onReset={jest.fn()}
+          isRunning={false}
+        />,
+      );
+
+      // Clear Week 1 input
+      const weekInput = screen.getByLabelText("Week 1");
+      await user.clear(weekInput);
+
+      const runButton = screen.getByRole("button", { name: /Run simulation/i });
+      await user.click(runButton);
+      expect(runButton).toBeDisabled();
+      expect(
+        screen.getByText(
+          /add at least one historical week and remaining work/i,
+        ),
+      ).toBeInTheDocument();
+    });
   });
 
   it.todo("submits form and triggers simulation");
