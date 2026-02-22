@@ -11,3 +11,17 @@ it("renders form and disables run button when empty", () => {
     screen.getByRole("button", { name: /Run simulation/i }),
   ).toBeDisabled();
 });
+
+describe.todo("SimulationForm", () => {
+  it.todo("renders initial form state");
+  it.todo("accepts user input for project size and velocity");
+  it.todo("validates input and shows errors");
+  it.todo("submits form and triggers simulation");
+  it.todo("displays loading or skeleton while simulating");
+  it.todo("shows simulation results after completion");
+  it.todo("handles edge cases (e.g., empty input, zero velocity)");
+  it.todo(
+    "integrates with child components (WeeklyThroughputInput, DeliveryOddsChart, etc.)",
+  );
+  it.todo("resets form and results when requested");
+});
