@@ -12,8 +12,17 @@ it("renders form and disables run button when empty", () => {
   ).toBeDisabled();
 });
 
-describe.todo("SimulationForm", () => {
-  it.todo("renders initial form state");
+describe("SimulationForm", () => {
+  it("renders initial form state", () => {
+    render(
+      <SimulationForm onRun={() => {}} onReset={() => {}} isRunning={false} />,
+    );
+    expect(screen.getByLabelText(/Remaining Work Items/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Run simulation/i }),
+    ).toBeDisabled();
+  });
+
   it.todo("accepts user input for project size and velocity");
   it.todo("validates input and shows errors");
   it.todo("submits form and triggers simulation");
