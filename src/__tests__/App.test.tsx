@@ -30,8 +30,23 @@ async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>) {
 
 describe("App", () => {
   describe("initial render", () => {
-    it.todo("shows idle status before any simulation is run");
-    it.todo("results panel has no completion dates visible initially");
+    it("shows idle status before any simulation is run", () => {
+      render(<App />);
+
+      const idleLayer = screen
+        .getByText(/enter completed work items/i)
+        .closest('[class*="status-row__layer"]');
+      expect(idleLayer).toHaveClass("status-row__layer--visible");
+    });
+
+    it("results panel has no completion dates visible initially", () => {
+      render(<App />);
+
+      // Week counts (e.g. "4 weeks") and calendar dates (e.g. "Mar 21, 2026")
+      // only appear after a simulation completes; all outcomes start as "— weeks"
+      expect(screen.queryByText(/\d+ weeks/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/\w{3} \d{1,2}, \d{4}/)).not.toBeInTheDocument();
+    });
   });
 
   describe("simulation flow", () => {
