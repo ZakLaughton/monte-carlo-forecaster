@@ -17,6 +17,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.useRealTimers();
+  jest.restoreAllMocks();
 });
 
 // delay: null disables userEvent's internal pointer delays so they don't
@@ -156,11 +157,62 @@ describe("App", () => {
   });
 
   describe("reset flow", () => {
-    it.todo("results panel returns to idle state after reset");
-    it.todo("form fields are cleared after reset");
-    it.todo(
-      "reset during an in-flight simulation cancels the loading delay and clears state",
-    );
+    it("results panel returns to idle state after reset", async () => {
+      jest.spyOn(window, "confirm").mockReturnValue(true);
+      const user = userEvent.setup({ delay: null });
+      render(<App />);
+
+      await fillAndSubmit(user);
+      act(() => {
+        jest.advanceTimersByTime(600);
+      });
+      expect(screen.getByText(/5 simulations/i)).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: /reset/i }));
+
+      // StatusCard should show idle text
+      const idleLayer = screen
+        .getByText(/enter completed work items/i)
+        .closest('[class*="status-row__layer"]');
+      expect(idleLayer).toHaveClass("status-row__layer--visible");
+      // Simulation stats from before reset should be gone
+      expect(screen.queryByText(/5 simulations/i)).not.toBeInTheDocument();
+    });
+
+    it("form fields are cleared after reset", async () => {
+      jest.spyOn(window, "confirm").mockReturnValue(true);
+      const user = userEvent.setup({ delay: null });
+      render(<App />);
+
+      await fillAndSubmit(user);
+      act(() => {
+        jest.advanceTimersByTime(600);
+      });
+
+      await user.click(screen.getByRole("button", { name: /reset/i }));
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("");
+    });
+
+    it("Reset button is disabled while simulation is loading", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(<App />);
+
+      await fillAndSubmit(user);
+
+      // handleReset returns early when isRunning, and the button is also
+      // disabled — so reset cannot be triggered mid-simulation
+      expect(screen.getByRole("button", { name: /reset/i })).toBeDisabled();
+
+      act(() => {
+        jest.advanceTimersByTime(600);
+      });
+
+      expect(
+        screen.getByRole("button", { name: /reset/i }),
+      ).not.toBeDisabled();
+    });
   });
 
   describe("localStorage persistence", () => {
