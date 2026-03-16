@@ -40,4 +40,4 @@ Analytics is initialized in `src/main.tsx` using `@plausible-analytics/tracker`.
 
 - Tracking runs **only in production** (`import.meta.env.PROD`)
 - Tracking is explicitly disabled on localhost (`captureOnLocalhost: false`)
-- Domain is hardcoded to `forecaster.zaklaughton.dev`
+- Domain is hardcoded to `deliveryforecst.app`

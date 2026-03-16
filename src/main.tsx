@@ -8,7 +8,7 @@ import App from "./App.tsx";
 
 if (import.meta.env.PROD) {
   init({
-    domain: "forecaster.zaklaughton.dev",
+    domain: "deliveryforecast.app",
     captureOnLocalhost: false,
   });
 }
