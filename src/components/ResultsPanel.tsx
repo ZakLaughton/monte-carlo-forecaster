@@ -32,6 +32,7 @@ export function ResultsPanel({
           <Button
             variant="light"
             size="xs"
+            className="share-button-pulse"
             onClick={() => navigator.clipboard.writeText(window.location.href)}
           >
             Share results
