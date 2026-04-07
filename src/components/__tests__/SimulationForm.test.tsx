@@ -200,6 +200,49 @@ describe("SimulationForm", () => {
     });
   });
 
+  describe("URL params and localStorage protection", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("does not overwrite existing localStorage when loading from URL params", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({
+          weeklyThroughput: [99],
+          projectSize: 999,
+          startDate: "2020-01-01",
+        }),
+      );
+      window.history.pushState({}, "", "?weeks=5,3&size=20&start=2026-04-01");
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      const stored = JSON.parse(
+        localStorage.getItem("delivery-forecaster-form")!,
+      );
+      expect(stored.weeklyThroughput).toEqual([99]);
+      expect(stored.projectSize).toBe(999);
+    });
+
+    it("writes to localStorage after user edits the form when loaded from URL params", async () => {
+      const user = userEvent.setup();
+      window.history.pushState({}, "", "?weeks=5,3&size=20&start=2026-04-01");
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      await user.type(screen.getByLabelText("Week 1"), "9");
+
+      const stored = JSON.parse(
+        localStorage.getItem("delivery-forecaster-form")!,
+      );
+      expect(stored).not.toBeNull();
+      expect(stored.weeklyThroughput[0]).toBe(59); // 5 was pre-populated, 9 appended
+    });
+  });
+
   it("does not reset when the user cancels the confirm dialog", async () => {
     jest.spyOn(window, "confirm").mockImplementation(() => false);
     const onReset = jest.fn();

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { parseShareParams } from "../utils/share-params";
 
 export type SimulationFormState = {
@@ -74,9 +74,17 @@ export function useSimulationFormStorage(storageKey = DEFAULT_STORAGE_KEY) {
   const [formState, setFormState] = useState<SimulationFormState>(() =>
     loadInitialState(storageKey),
   );
+  const skipNextWrite = useRef(
+    typeof window !== "undefined" &&
+      !!parseShareParams(window.location.search),
+  );
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (skipNextWrite.current) {
+      skipNextWrite.current = false;
+      return;
+    }
     window.localStorage.setItem(storageKey, JSON.stringify(formState));
   }, [storageKey, formState]);
 
