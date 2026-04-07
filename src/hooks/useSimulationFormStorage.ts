@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { parseShareParams } from "../utils/share-params";
 
 export type SimulationFormState = {
   weeklyThroughput: (number | null)[];
@@ -50,6 +51,15 @@ function loadInitialState(storageKey: string): SimulationFormState {
   const fallback = getDefaultFormState();
 
   if (typeof window === "undefined") return fallback;
+
+  const shareParams = parseShareParams(window.location.search);
+  if (shareParams) {
+    return {
+      weeklyThroughput: shareParams.weeks,
+      projectSize: shareParams.size,
+      startDate: shareParams.start,
+    };
+  }
 
   try {
     const raw = window.localStorage.getItem(storageKey);
