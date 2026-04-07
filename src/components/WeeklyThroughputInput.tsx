@@ -60,8 +60,8 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
           </Text>
         </Group>
         <Text size="xs" c="dimmed">
-          Count completed units (ticket, issue, bug, task, story, etc.) using
-          consistent rules.
+          Count completed work items (tickets, stories, tasks, etc.) from any
+          recent weeks — project history not required.
         </Text>
       </div>
 
