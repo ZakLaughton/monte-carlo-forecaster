@@ -1,4 +1,5 @@
 import { Stack, Button, Group } from "@mantine/core";
+import { useState } from "react";
 import { StatusCard } from "./StatusCard";
 import { Crossfade } from "./Crossfade";
 import { KeyOutcomes } from "./KeyOutcomes";
@@ -21,6 +22,14 @@ export function ResultsPanel({
   isRunning,
   hasResults,
 }: Props) {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const statusState = isRunning ? "running" : hasResults ? "done" : "idle";
   const revealed = hasResults && !isRunning;
 
@@ -33,9 +42,9 @@ export function ResultsPanel({
             variant="light"
             size="xs"
             className="share-button-pulse"
-            onClick={() => navigator.clipboard.writeText(window.location.href)}
+            onClick={handleShare}
           >
-            Share results
+            {copied ? "Link copied!" : "Share results"}
           </Button>
         )}
       </Group>
