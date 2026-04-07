@@ -6,6 +6,7 @@ import { toOddsByWeek } from "./utils/stats";
 import { ResultsPanel } from "./components/ResultsPanel";
 import { getTodayIsoDate } from "./hooks/useSimulationFormStorage";
 import { useAutoRunFromUrlParams } from "./hooks/useAutoRunFromUrlParams";
+import { buildShareParams } from "./utils/share-params";
 
 const MIN_RUNNING_MS = 400;
 const REVEAL_TRANSITION_MS = 200;
@@ -34,6 +35,7 @@ function App() {
       setIsRunning(true);
       setIsRevealing(false);
       setForecastStartDate(startDate);
+      window.history.replaceState({}, "", buildShareParams({ weeks: sanitizedVelocities, size: projectSize, start: startDate }));
 
       const startedAt = Date.now();
 
@@ -70,6 +72,7 @@ function App() {
     setForecastStartDate(getTodayIsoDate());
     setIsRunning(false);
     setIsRevealing(false);
+    window.history.replaceState({}, "", window.location.pathname);
   }, []);
 
   const oddsByWeek = useMemo(

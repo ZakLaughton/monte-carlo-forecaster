@@ -231,6 +231,35 @@ describe("App", () => {
     });
   });
 
+  describe("URL sync", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("updates the URL with simulation inputs when run is clicked", async () => {
+      const user = userEvent.setup({ delay: null });
+      render(<App />);
+
+      await fillAndSubmit(user);
+
+      expect(window.location.search).toContain("weeks=5");
+      expect(window.location.search).toContain("size=10");
+    });
+
+    it("clears URL params when reset is clicked", async () => {
+      jest.spyOn(window, "confirm").mockReturnValue(true);
+      const user = userEvent.setup({ delay: null });
+      render(<App />);
+
+      await fillAndSubmit(user);
+      act(() => { jest.advanceTimersByTime(600); });
+
+      await user.click(screen.getByRole("button", { name: /reset/i }));
+
+      expect(window.location.search).toBe("");
+    });
+  });
+
   describe("URL param auto-run", () => {
     afterEach(() => {
       window.history.pushState({}, "", "/");
