@@ -4,6 +4,10 @@ export interface ShareParams {
   start: string;
 }
 
+export function buildShareParams({ weeks, size, start }: ShareParams): string {
+  return `?weeks=${weeks.join(",")}&size=${size}&start=${start}`;
+}
+
 export function parseShareParams(search: string): ShareParams | null {
   const params = new URLSearchParams(search);
 

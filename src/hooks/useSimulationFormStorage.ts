@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { parseShareParams } from "../utils/share-params";
 
 export type SimulationFormState = {
   weeklyThroughput: (number | null)[];
@@ -51,6 +52,15 @@ function loadInitialState(storageKey: string): SimulationFormState {
 
   if (typeof window === "undefined") return fallback;
 
+  const shareParams = parseShareParams(window.location.search);
+  if (shareParams) {
+    return {
+      weeklyThroughput: shareParams.weeks,
+      projectSize: shareParams.size,
+      startDate: shareParams.start,
+    };
+  }
+
   try {
     const raw = window.localStorage.getItem(storageKey);
     if (!raw) return fallback;
@@ -64,9 +74,17 @@ export function useSimulationFormStorage(storageKey = DEFAULT_STORAGE_KEY) {
   const [formState, setFormState] = useState<SimulationFormState>(() =>
     loadInitialState(storageKey),
   );
+  const skipNextWrite = useRef(
+    typeof window !== "undefined" &&
+      !!parseShareParams(window.location.search),
+  );
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (skipNextWrite.current) {
+      skipNextWrite.current = false;
+      return;
+    }
     window.localStorage.setItem(storageKey, JSON.stringify(formState));
   }, [storageKey, formState]);
 

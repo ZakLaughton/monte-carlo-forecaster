@@ -1,4 +1,5 @@
-import { Stack } from "@mantine/core";
+import { Stack, Group } from "@mantine/core";
+import { ShareButton } from "./ShareButton";
 import { StatusCard } from "./StatusCard";
 import { Crossfade } from "./Crossfade";
 import { KeyOutcomes } from "./KeyOutcomes";
@@ -26,7 +27,10 @@ export function ResultsPanel({
 
   return (
     <Stack gap="md">
-      <StatusCard state={statusState} />
+      <Group justify="space-between" align="center">
+        <StatusCard state={statusState} />
+        {hasResults && <ShareButton />}
+      </Group>
 
       <Crossfade
         revealed={revealed}

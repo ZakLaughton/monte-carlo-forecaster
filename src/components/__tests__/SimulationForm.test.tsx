@@ -200,6 +200,49 @@ describe("SimulationForm", () => {
     });
   });
 
+  describe("URL params and localStorage protection", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("does not overwrite existing localStorage when loading from URL params", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({
+          weeklyThroughput: [99],
+          projectSize: 999,
+          startDate: "2020-01-01",
+        }),
+      );
+      window.history.pushState({}, "", "?weeks=5,3&size=20&start=2026-04-01");
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      const stored = JSON.parse(
+        localStorage.getItem("delivery-forecaster-form")!,
+      );
+      expect(stored.weeklyThroughput).toEqual([99]);
+      expect(stored.projectSize).toBe(999);
+    });
+
+    it("writes to localStorage after user edits the form when loaded from URL params", async () => {
+      const user = userEvent.setup();
+      window.history.pushState({}, "", "?weeks=5,3&size=20&start=2026-04-01");
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      await user.type(screen.getByLabelText("Week 1"), "9");
+
+      const stored = JSON.parse(
+        localStorage.getItem("delivery-forecaster-form")!,
+      );
+      expect(stored).not.toBeNull();
+      expect(stored.weeklyThroughput[0]).toBe(59); // 5 was pre-populated, 9 appended
+    });
+  });
+
   it("does not reset when the user cancels the confirm dialog", async () => {
     jest.spyOn(window, "confirm").mockImplementation(() => false);
     const onReset = jest.fn();
@@ -217,6 +260,70 @@ describe("SimulationForm", () => {
     expect(onReset).not.toHaveBeenCalled();
     expect(screen.getByLabelText("Week 1")).toHaveValue("5");
     expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("10");
+  });
+
+  describe("URL param pre-population", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("populates all form fields from URL params", () => {
+      window.history.pushState(
+        {},
+        "",
+        "?weeks=5,3,8&size=42&start=2026-03-15",
+      );
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("5");
+      expect(screen.getByLabelText("Week 2")).toHaveValue("3");
+      expect(screen.getByLabelText("Week 3")).toHaveValue("8");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("42");
+      expect(screen.getByLabelText("Forecast Start Date")).toHaveValue(
+        "2026-03-15",
+      );
+    });
+
+    it("URL params take precedence over localStorage", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({
+          weeklyThroughput: [99],
+          projectSize: 999,
+          startDate: "2020-01-01",
+        }),
+      );
+      window.history.pushState({}, "", "?weeks=5,3&size=20&start=2026-04-01");
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("5");
+      expect(screen.getByLabelText("Week 2")).toHaveValue("3");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("20");
+      expect(screen.getByLabelText("Forecast Start Date")).toHaveValue(
+        "2026-04-01",
+      );
+    });
+
+    it("falls back to localStorage when no URL params present", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({
+          weeklyThroughput: [7],
+          projectSize: 30,
+          startDate: "2026-04-01",
+        }),
+      );
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("7");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("30");
+    });
   });
 
   it("resets form and results when requested", async () => {

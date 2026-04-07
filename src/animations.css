@@ -32,6 +32,21 @@
   pointer-events: auto;
 }
 
+/* ── Share button pulse ──────────────────────────── */
+
+@keyframes share-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(76, 110, 245, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(76, 110, 245, 0.35);
+  }
+}
+
+.share-button-pulse {
+  animation: share-pulse 900ms ease-in-out 3;
+}
+
 /* ── Status row system ───────────────────────────── */
 
 .status-row {
