@@ -1,43 +1,72 @@
-# monte-carlo-forecaster
+# Delivery Forecast
 
-Project Goal: A Proof-of-Concept (PoC) tool to automate probabilistic sprint planning.
+A fast, lightweight tool for probabilistic project forecasting. Enter your team's historical weekly throughput and remaining work — get a realistic range of delivery dates in seconds, no story pointing required.
 
-Context: Moving away from time-based estimation toward historical velocity data can reduce sprint planning overhead. This prototype explores using a Monte Carlo simulation to visualize "percent likelihood" of delivery dates based on past throughput.
+Live at [deliveryforecast.app](https://deliveryforecast.app)
 
-Tech Stack Experiments:
-• Vite + React: Exploring lightweight build tooling for fast prototyping.
-• Monte Carlo Logic: Client-side simulation of 10,000+ iterations.
-• Visualization: Rendering statistical distribution using Recharts.
+---
 
-## Common Commands
+## What it does
 
-- **Start development server:** `npm run dev`
-- **Build for production:** `npm run build`
-- **Preview production build:** `npm run preview`
-- **Run ESLint:** `npm run lint`
-- **Run tests:** `npm test`
+Traditional estimation asks teams to size every ticket upfront, which is slow and often inaccurate. This tool takes a different approach: use what your team has actually delivered historically to predict what they'll deliver in the future.
 
-## Testing & Coverage
+Enter a few weeks of completed work items and your remaining story count. The tool runs 10,000 Monte Carlo simulations and shows you the range of likely delivery dates — with explicit probabilities at the 50%, 85%, and 95% likelihood thresholds.
 
-Jest and React Testing Library are used for unit and UI tests.
+Key benefits over story pointing:
+- **No per-ticket estimation** — just count completed tasks/stories each week
+- **Realistic uncertainty** — shows a range of outcomes, not a false single date
+- **Naturally accounts for variability** — vacations, bugs, unplanned work are already baked into your historical throughput. No manual adjustments needed.
+
+---
+
+## Features
+
+- **Weekly throughput input** — add as many historical weeks as you have. More weeks = more reliable forecast
+- **Key outcomes** — delivery dates at 50%, 85%, and 95% likelihood
+- **Distribution chart** — visualizes the full spread of simulation outcomes
+- **Shareable URLs** — results are encoded in the URL so you can share a forecast directly with teammates. Anyone who opens the link sees the same inputs and gets a fresh simulation run
+- **Persistent form state** — inputs are saved to localStorage so your data is there when you come back
+- **Works for any team** — not tied to any specific tool. Count tickets from Jira, Linear, GitHub, a spreadsheet — anything
+
+---
+
+## Planned
+
+- **Historical forecast snapshots** — save and compare forecasts over time to see how the project is tracking week to week
+- **In-app guidance** — FAQ and how-to content to help teams get started, including how to pull throughput data from tools like Jira
+
+---
+
+## Development
+
+### Commands
+
+```bash
+npm run dev          # Start Vite dev server
+npm run build        # tsc -b && vite build
+npm run lint         # ESLint
+npm test             # Run all Jest tests with coverage
+npm run coverage:open # Open coverage report in browser
+```
+
+### Stack
+
+- Vite + React + TypeScript
+- Mantine UI
+- Recharts for visualizations
+- Jest + React Testing Library
+- Monte Carlo simulation runs client-side (no backend)
+
+### Testing
+
+Jest and React Testing Library. See `CLAUDE.md` for testing conventions and architecture details.
 
 - **Run all tests:** `npm test`
-- **Run a single file:** `npm test src/components/__tests__/SimulationForm.test.tsx`
+- **Run a single file:** `npx jest src/components/__tests__/SimulationForm.test.tsx`
 - **Run only changed files:** `npm test -- --onlyChanged`
 
-Coverage reports are output to the `coverage/` directory.
+Coverage reports output to `coverage/`. Open with `npm run coverage:open`.
 
-To view coverage in your browser:
+### Analytics
 
-- After running tests, open `coverage/lcov-report/index.html` in your browser.
-- Or use the script below for convenience.
-
-**Open coverage report:** `npm run coverage:open`
-
-## Plausible Analytics
-
-Analytics is initialized in `src/main.tsx` using `@plausible-analytics/tracker`.
-
-- Tracking runs **only in production** (`import.meta.env.PROD`)
-- Tracking is explicitly disabled on localhost (`captureOnLocalhost: false`)
-- Domain is hardcoded to `deliveryforecst.app`
+Plausible Analytics is initialized in `src/main.tsx`. Runs in production only (`import.meta.env.PROD`), disabled on localhost.
