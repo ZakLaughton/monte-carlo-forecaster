@@ -5,6 +5,7 @@ import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { toOddsByWeek } from "./utils/stats";
 import { ResultsPanel } from "./components/ResultsPanel";
 import { getTodayIsoDate } from "./hooks/useSimulationFormStorage";
+import { useAutoRunFromUrlParams } from "./hooks/useAutoRunFromUrlParams";
 
 const MIN_RUNNING_MS = 400;
 const REVEAL_TRANSITION_MS = 200;
@@ -59,6 +60,8 @@ function App() {
     },
     [],
   );
+
+  useAutoRunFromUrlParams(runSimulation);
 
   const resetForecast = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);

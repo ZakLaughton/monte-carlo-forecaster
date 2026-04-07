@@ -11,6 +11,7 @@ const MOCK_RESULTS = [3, 3, 4, 4, 5];
 
 beforeEach(() => {
   jest.useFakeTimers();
+  (simulateDeliveryWeeks as jest.Mock).mockClear();
   (simulateDeliveryWeeks as jest.Mock).mockReturnValue(MOCK_RESULTS);
   localStorage.clear();
 });
@@ -227,6 +228,41 @@ describe("App", () => {
       expect(
         screen.getByRole("button", { name: /reset/i }),
       ).not.toBeDisabled();
+    });
+  });
+
+  describe("URL param auto-run", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it("auto-runs the simulation on mount when URL params are present", () => {
+      window.history.pushState(
+        {},
+        "",
+        "?weeks=5,3,8&size=40&start=2026-04-07",
+      );
+      render(<App />);
+
+      act(() => {
+        jest.advanceTimersByTime(400);
+      });
+
+      expect(simulateDeliveryWeeks).toHaveBeenCalledWith({
+        velocityHistory: [5, 3, 8],
+        projectSize: 40,
+      });
+      expect(screen.getAllByText(/weeks/i).length).toBeGreaterThan(0);
+    });
+
+    it("does not auto-run when no URL params are present", () => {
+      render(<App />);
+
+      act(() => {
+        jest.advanceTimersByTime(400);
+      });
+
+      expect(simulateDeliveryWeeks).not.toHaveBeenCalled();
     });
   });
 
