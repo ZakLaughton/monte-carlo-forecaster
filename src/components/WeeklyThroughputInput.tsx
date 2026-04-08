@@ -60,8 +60,7 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
           </Text>
         </Group>
         <Text size="xs" c="dimmed">
-          Count completed work items (tickets, stories, tasks, etc.) from any
-          recent weeks.
+          Items that moved to a completed status during each week — tickets, stories, tasks, etc.
         </Text>
       </div>
 
