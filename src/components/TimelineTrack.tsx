@@ -35,7 +35,7 @@ export function TimelineTrack({ positions }: Props) {
           left: INSET,
           right: INSET,
           height: TRACK_HEIGHT,
-          borderRadius: 3,
+          borderRadius: "0 3px 3px 0",
           background: "var(--mantine-color-dark-4)",
         }}
       >
