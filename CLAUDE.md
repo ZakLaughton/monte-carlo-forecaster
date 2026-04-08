@@ -50,6 +50,10 @@ SimulationForm (weekly throughput, project size, start date)
 - **localStorage:** Call `localStorage.clear()` in `beforeEach` in any test that touches form persistence.
 - **ts-jest config:** Jest uses `tsconfig.jest.json` (CommonJS module mode) — separate from `tsconfig.app.json` (bundler/ESNext mode used by Vite and the IDE).
 
+## Code Style
+
+**Function order — newspaper style:** In every file, exported (public) functions come first, followed by the private helpers they call. A reader should be able to understand what a file does from the top without scrolling through implementation details first.
+
 ## Key File Locations
 
 | Concern | File |
