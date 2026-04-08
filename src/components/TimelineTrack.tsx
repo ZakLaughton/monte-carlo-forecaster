@@ -64,7 +64,7 @@ export function TimelineTrack({ positions }: Props) {
       {/* Pins */}
       <Pin pin={positions.p50} label="50% done" subLabel="by this date" muted left={pinLeft(positions.p50.positionPct)} />
       <Pin pin={positions.p85} label="85% done" subLabel="by this date" accent starOnDate left={pinLeft(positions.p85.positionPct)} />
-      <Pin pin={positions.p95} label="95% done" subLabel="by this date" muted left={pinLeft(positions.p95.positionPct)} />
+      <Pin pin={positions.p95} label="95% done" subLabel="by this date" muted dim left={pinLeft(positions.p95.positionPct)} />
     </div>
   );
 }
@@ -78,9 +78,10 @@ type PinProps = {
   muted?: boolean;
   accent?: boolean;
   starOnDate?: boolean;
+  dim?: boolean;
 };
 
-function Pin({ pin, label, subLabel, left, faint, accent, starOnDate }: PinProps) {
+function Pin({ pin, label, subLabel, left, faint, accent, starOnDate, dim }: PinProps) {
   const color = accent
     ? "var(--mantine-color-green-4)"
     : faint
@@ -99,7 +100,7 @@ function Pin({ pin, label, subLabel, left, faint, accent, starOnDate }: PinProps
   return (
     <div
       data-pin
-      style={{ position: "absolute", left, top: 0, transform: "translateX(-50%)" }}
+      style={{ position: "absolute", left, top: 0, transform: "translateX(-50%)", opacity: dim ? 0.55 : 1 }}
     >
       {/* Date — bottom-aligned above the tick */}
       <div style={{ ...center, top: 0, height: TICK_TOP, alignItems: "flex-end" }}>
