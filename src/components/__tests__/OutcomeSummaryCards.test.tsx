@@ -24,9 +24,9 @@ describe("OutcomeSummaryCards", () => {
       expect(screen.getByText("Jun 2")).toBeInTheDocument();
     });
 
-    it("renders the week label in the subtext", () => {
+    it("renders the subtext with full plain-language copy", () => {
       render(<OutcomeSummaryCards {...BASE_PROPS} />);
-      expect(screen.getByText(/85% of simulations · 8 weeks/i)).toBeInTheDocument();
+      expect(screen.getByText(/85% of simulations done by this date · 8 weeks out/i)).toBeInTheDocument();
     });
 
     it("renders a 'commit to this' label", () => {

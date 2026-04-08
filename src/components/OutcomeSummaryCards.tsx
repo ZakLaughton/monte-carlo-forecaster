@@ -20,11 +20,8 @@ export function OutcomeSummaryCards({ p50, p85, p95 }: Props) {
   );
 }
 
-function CommitCard({ p85, p95 }: { p85: PinSummary; p95: PinSummary }) {
-  const subtext =
-    p85.weekLabel === p95.weekLabel
-      ? `85–95% of simulations · ${p85.weekLabel}`
-      : `85% of simulations · ${p85.weekLabel}`;
+function CommitCard({ p85, p95: _p95 }: { p85: PinSummary; p95: PinSummary }) {
+  const subtext = `85% of simulations done by this date · ${p85.weekLabel} out`;
 
   return (
     <Stack
