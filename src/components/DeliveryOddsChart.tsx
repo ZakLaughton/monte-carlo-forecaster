@@ -97,9 +97,11 @@ export function DeliveryOddsTable({ data, startDate = "" }: Props) {
       <Anchor component="button" size="xs" mt={4} c="dimmed" onClick={toggle}>
         {showFull ? "Show less" : "Show full distribution"}
       </Anchor>
-      <Text fz={11} c="dimmed" mt={6}>
-        * Most teams use 85% for external commitments.
-      </Text>
+      {percentiles.length > 0 && (
+        <Text fz={11} c="dimmed" mt={6}>
+          * Most teams use 85% for external commitments.
+        </Text>
+      )}
     </>
   );
 }
