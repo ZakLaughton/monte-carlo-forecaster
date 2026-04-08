@@ -31,9 +31,9 @@ describe("OutcomeSummaryCards", () => {
       expect(screen.getByText(/85% of simulations done by this date · 8 weeks out/i)).toBeInTheDocument();
     });
 
-    it("renders a 'commit to this' label", () => {
+    it("renders a '85% confidence date' label", () => {
       render(<OutcomeSummaryCards {...BASE_PROPS} />);
-      expect(screen.getByText(/commit to this/i)).toBeInTheDocument();
+      expect(screen.getByText(/85% confidence date/i)).toBeInTheDocument();
     });
 
     it("renders '85% of simulations' in the subtext", () => {
