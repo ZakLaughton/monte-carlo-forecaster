@@ -21,9 +21,6 @@ export function KeyOutcomes({ data, startDate = "" }: Props) {
       withBorder
       radius="md"
       style={(theme) => ({
-        background: isEmpty
-          ? `linear-gradient(135deg, ${theme.colors.dark[7]}, ${theme.colors.dark[6]})`
-          : `linear-gradient(135deg, ${theme.colors.blue[9]}22, ${theme.colors.violet[9]}22)`,
         borderColor: isEmpty ? theme.colors.dark[4] : theme.colors.blue[7],
         opacity: isEmpty ? 0.82 : 1,
       })}
