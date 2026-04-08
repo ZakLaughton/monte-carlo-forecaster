@@ -1,4 +1,4 @@
-import { Paper, Title } from "@mantine/core";
+import { Divider, Paper, Stack, Title } from "@mantine/core";
 import { getTimelinePositions } from "../utils/outcomes";
 import { TimelineTrack } from "./TimelineTrack";
 import { OutcomeSummaryCards } from "./OutcomeSummaryCards";
@@ -29,13 +29,16 @@ export function KeyOutcomes({ data, startDate = "" }: Props) {
         Key Outcomes
       </Title>
       {timelinePositions && (
-        <OutcomeSummaryCards
-          p50={timelinePositions.p50}
-          p85={timelinePositions.p85}
-          p95={timelinePositions.p95}
-        />
+        <Stack gap={0}>
+          <OutcomeSummaryCards
+            p50={timelinePositions.p50}
+            p85={timelinePositions.p85}
+            p95={timelinePositions.p95}
+          />
+          <Divider my="sm" />
+          <TimelineTrack positions={timelinePositions} />
+        </Stack>
       )}
-      {timelinePositions && <TimelineTrack positions={timelinePositions} />}
     </Paper>
   );
 }
