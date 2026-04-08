@@ -1,8 +1,11 @@
 import { Paper, Group, Stack, Text, Title } from "@mantine/core";
 import { toCompletionDate } from "../utils/dates";
+import { getTimelinePositions } from "../utils/outcomes";
+import { TimelineTrack } from "./TimelineTrack";
+import type { OddsByWeekPoint } from "../utils/stats";
 
 type Props = {
-  data: { weeks: number; p: number }[];
+  data: OddsByWeekPoint[];
   startDate?: string;
 };
 
@@ -80,6 +83,9 @@ export function KeyOutcomes({ data, startDate = "" }: Props) {
     { label: "Almost certain", sublabel: "95% likelihood", weeks: p95 },
   ];
 
+  const timelinePositions =
+    !isEmpty && startDate ? getTimelinePositions(data, startDate) : null;
+
   return (
     <Paper
       shadow="md"
@@ -107,6 +113,7 @@ export function KeyOutcomes({ data, startDate = "" }: Props) {
           />
         ))}
       </Group>
+      {timelinePositions && <TimelineTrack positions={timelinePositions} />}
     </Paper>
   );
 }
