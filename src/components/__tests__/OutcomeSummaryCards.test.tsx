@@ -13,6 +13,13 @@ const BASE_PROPS = {
 };
 
 describe("OutcomeSummaryCards", () => {
+  describe("full-width card", () => {
+    it("renders a single card with no siblings", () => {
+      const { container } = render(<OutcomeSummaryCards {...BASE_PROPS} />);
+      expect(container.firstChild?.childNodes).toHaveLength(1);
+    });
+  });
+
   describe("left card (85% commit date)", () => {
     it("renders the p85 date", () => {
       render(<OutcomeSummaryCards {...BASE_PROPS} />);
