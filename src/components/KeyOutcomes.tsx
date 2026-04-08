@@ -30,11 +30,7 @@ export function KeyOutcomes({ data, startDate = "" }: Props) {
       </Title>
       {timelinePositions && (
         <Stack gap={0}>
-          <OutcomeSummaryCards
-            p50={timelinePositions.p50}
-            p85={timelinePositions.p85}
-            p95={timelinePositions.p95}
-          />
+          <OutcomeSummaryCards p85={timelinePositions.p85} />
           <Divider my="sm" />
           <TimelineTrack positions={timelinePositions} />
         </Stack>

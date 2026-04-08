@@ -1,20 +1,15 @@
 /**
  * Tests for OutcomeSummaryCards.
  *
- * Two side-by-side cards:
- * - Left (accent, 2/3 width): the recommended commit date at 85%
- * - Right (dimmed, 1/3 width): the 50% reference date
- *
- * The 50% card must never use positive framing — it's a cautionary anchor.
+ * Single full-width card showing the recommended 85% commit date.
+ * The 50% reference has been removed — it's already shown in the timeline below.
  */
 
 import { render, screen } from "../../test-utils";
 import { OutcomeSummaryCards } from "../OutcomeSummaryCards";
 
 const BASE_PROPS = {
-  p50: { date: "May 26", weekLabel: "7 weeks" },
   p85: { date: "Jun 2", weekLabel: "8 weeks" },
-  p95: { date: "Jun 9", weekLabel: "9 weeks" },
 };
 
 describe("OutcomeSummaryCards", () => {
@@ -40,31 +35,15 @@ describe("OutcomeSummaryCards", () => {
     });
   });
 
-  describe("right card (50% reference)", () => {
-    it("renders the p50 date", () => {
+  describe("50% reference (removed)", () => {
+    it("does not render the 50% date", () => {
       render(<OutcomeSummaryCards {...BASE_PROPS} />);
-      expect(screen.getByText("May 26")).toBeInTheDocument();
+      expect(screen.queryByText("May 26")).not.toBeInTheDocument();
     });
 
-    it("renders '50% of simulations' label", () => {
+    it("does not render '50% of simulations' text", () => {
       render(<OutcomeSummaryCards {...BASE_PROPS} />);
-      expect(screen.getByText(/50% of simulations/i)).toBeInTheDocument();
-    });
-
-    it("does not use positive framing on the 50% card", () => {
-      render(<OutcomeSummaryCards {...BASE_PROPS} />);
-      const text = document.body.textContent ?? "";
-      expect(text).not.toMatch(/most likely/i);
-      expect(text).not.toMatch(/best case/i);
-    });
-
-    it("renders the right card at reduced opacity", () => {
-      render(<OutcomeSummaryCards {...BASE_PROPS} />);
-      const rightCard = screen.getByTestId("card-p50");
-      const opacity = parseFloat(
-        (rightCard as HTMLElement).style.opacity ?? "1",
-      );
-      expect(opacity).toBeLessThan(1);
+      expect(screen.queryByText(/50% of simulations/i)).not.toBeInTheDocument();
     });
   });
 });
