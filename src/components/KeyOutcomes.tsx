@@ -1,5 +1,4 @@
-import { Paper, Group, Stack, Text, Title } from "@mantine/core";
-import { toCompletionDate } from "../utils/dates";
+import { Paper, Title } from "@mantine/core";
 import { getTimelinePositions } from "../utils/outcomes";
 import { TimelineTrack } from "./TimelineTrack";
 import { OutcomeSummaryCards } from "./OutcomeSummaryCards";
@@ -10,80 +9,8 @@ type Props = {
   startDate?: string;
 };
 
-function getPercentileWeeks(
-  data: { weeks: number; p: number }[],
-  target: number,
-): number | null {
-  const entry = data.find((point) => point.p >= target);
-  return entry ? entry.weeks : null;
-}
-
-type Outcome = {
-  label: string;
-  sublabel: string;
-  weeks: number | null;
-};
-
-function OutcomeMetric({
-  label,
-  sublabel,
-  weeks,
-  startDate = "",
-  isPlaceholder = false,
-}: Outcome & { startDate?: string; isPlaceholder?: boolean }) {
-  const weeksText =
-    weeks != null ? `${weeks} ${weeks === 1 ? "week" : "weeks"}` : "—";
-  const completionDate =
-    weeks != null && startDate ? toCompletionDate(startDate, weeks) : null;
-
-  return (
-    <Stack gap={2} align="center">
-      <Text
-        fw={700}
-        fz={completionDate != null ? 22 : 28}
-        lh={1.1}
-        ta="center"
-        c={weeks == null ? "dimmed" : undefined}
-        style={
-          isPlaceholder
-            ? {
-                background: "var(--mantine-color-dark-6)",
-                borderRadius: 8,
-                paddingInline: 10,
-                paddingBlock: 1,
-              }
-            : undefined
-        }
-      >
-        {completionDate ?? "—"}
-      </Text>
-      {completionDate && (
-        <Text c="dimmed" fz="xs" ta="center">
-          in {weeksText}
-        </Text>
-      )}
-      <Text fw={600} fz="sm" c={isPlaceholder ? "dimmed" : undefined}>
-        {label}
-      </Text>
-      <Text c="dimmed" fz="xs">
-        {sublabel}
-      </Text>
-    </Stack>
-  );
-}
-
 export function KeyOutcomes({ data, startDate = "" }: Props) {
   const isEmpty = data.length === 0;
-  const p50 = getPercentileWeeks(data, 0.5);
-  const p85 = getPercentileWeeks(data, 0.85);
-  const p95 = getPercentileWeeks(data, 0.95);
-
-  const outcomes: Outcome[] = [
-    { label: "Coin flip", sublabel: "50% likelihood", weeks: p50 },
-    { label: "Highly likely", sublabel: "85% likelihood", weeks: p85 },
-    { label: "Almost certain", sublabel: "95% likelihood", weeks: p95 },
-  ];
-
   const timelinePositions =
     !isEmpty && startDate ? getTimelinePositions(data, startDate) : null;
 
@@ -104,16 +31,6 @@ export function KeyOutcomes({ data, startDate = "" }: Props) {
       <Title order={4} ta="center" mb="sm">
         Key Outcomes
       </Title>
-      <Group justify="space-evenly" grow>
-        {outcomes.map((o) => (
-          <OutcomeMetric
-            key={o.label}
-            {...o}
-            startDate={startDate}
-            isPlaceholder={isEmpty}
-          />
-        ))}
-      </Group>
       {timelinePositions && (
         <OutcomeSummaryCards
           p50={timelinePositions.p50}
