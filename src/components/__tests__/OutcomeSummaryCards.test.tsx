@@ -10,6 +10,12 @@ import { OutcomeSummaryCards } from "../OutcomeSummaryCards";
 
 const BASE_PROPS = {
   p85: { date: "Jun 2", weekLabel: "8 weeks" },
+  p85p95Collapsed: false,
+};
+
+const COLLAPSED_PROPS = {
+  p85: { date: "Jun 2", weekLabel: "8 weeks" },
+  p85p95Collapsed: true,
 };
 
 describe("OutcomeSummaryCards", () => {
@@ -17,6 +23,21 @@ describe("OutcomeSummaryCards", () => {
     it("renders a single card with no siblings", () => {
       const { container } = render(<OutcomeSummaryCards {...BASE_PROPS} />);
       expect(container.firstChild?.childNodes).toHaveLength(1);
+    });
+  });
+
+  describe("collapsed (85% and 95% same week)", () => {
+    it("shows '85–95%' in the subtext", () => {
+      render(<OutcomeSummaryCards {...COLLAPSED_PROPS} />);
+      expect(screen.getByText(/85–95% of simulations done by this date/i)).toBeInTheDocument();
+    });
+  });
+
+  describe("spread (85% and 95% different weeks)", () => {
+    it("shows '85%' only in the subtext", () => {
+      render(<OutcomeSummaryCards {...BASE_PROPS} />);
+      expect(screen.getByText(/85% of simulations done by this date/i)).toBeInTheDocument();
+      expect(screen.queryByText(/85–95%/i)).not.toBeInTheDocument();
     });
   });
 

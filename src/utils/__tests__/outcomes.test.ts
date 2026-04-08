@@ -56,6 +56,24 @@ describe("getTimelinePositions", () => {
     });
   });
 
+  describe("p85p95Collapsed", () => {
+    it("is false when p85 and p95 land on different weeks", () => {
+      const result = getTimelinePositions(NORMAL_ODDS, START_DATE);
+      expect(result.p85p95Collapsed).toBe(false);
+    });
+
+    it("is true when p85 and p95 land on the same week", () => {
+      const tightOdds: OddsByWeekPoint[] = [
+        { weeks: 8, p: 0.5, count: 500 },
+        { weeks: 9, p: 0.85, count: 850 },
+        { weeks: 9, p: 0.95, count: 950 },
+        { weeks: 10, p: 1.0, count: 1000 },
+      ];
+      const result = getTimelinePositions(tightOdds, START_DATE);
+      expect(result.p85p95Collapsed).toBe(true);
+    });
+  });
+
   describe("edge case: percentile fallback when data doesn't reach target", () => {
     it("falls back to slowest week when no entry reaches the p95 threshold", () => {
       // max probability is 0.9, never reaches 0.95

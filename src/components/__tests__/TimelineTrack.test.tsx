@@ -15,6 +15,12 @@ const POSITIONS: TimelinePositions = {
   p85: { date: "Jun 9", weekLabel: "9 weeks", positionPct: 70 },
   p95: { date: "Jun 23", weekLabel: "11 weeks", positionPct: 90 },
   slowest: { date: "Jul 7", weekLabel: "13 weeks", positionPct: 100 },
+  p85p95Collapsed: false,
+};
+
+const COLLAPSED_POSITIONS: TimelinePositions = {
+  ...POSITIONS,
+  p85p95Collapsed: true,
 };
 
 describe("TimelineTrack", () => {
@@ -44,6 +50,27 @@ describe("TimelineTrack", () => {
       expect(screen.getByText("May 12")).toBeInTheDocument();
       expect(screen.getByText("Jun 9 ★")).toBeInTheDocument();
       expect(screen.getByText("Jun 23")).toBeInTheDocument();
+    });
+  });
+
+  describe("collapsed (p85 and p95 same week)", () => {
+    it("renders only two pins (p50 and p85)", () => {
+      render(<TimelineTrack positions={COLLAPSED_POSITIONS} />);
+      const pins = document.querySelectorAll("[data-pin]");
+      expect(pins).toHaveLength(2);
+    });
+
+    it("does not render the 95% done label", () => {
+      render(<TimelineTrack positions={COLLAPSED_POSITIONS} />);
+      expect(screen.queryByText("95% done")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("spread (p85 and p95 different weeks)", () => {
+    it("renders three pins (p50, p85, p95)", () => {
+      render(<TimelineTrack positions={POSITIONS} />);
+      const pins = document.querySelectorAll("[data-pin]");
+      expect(pins).toHaveLength(3);
     });
   });
 

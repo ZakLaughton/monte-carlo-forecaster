@@ -7,10 +7,12 @@ type PinSummary = {
 
 type Props = {
   p85: PinSummary;
+  p85p95Collapsed: boolean;
 };
 
-export function OutcomeSummaryCards({ p85 }: Props) {
-  const subtext = `85% of simulations done by this date · ${p85.weekLabel} out`;
+export function OutcomeSummaryCards({ p85, p85p95Collapsed }: Props) {
+  const pctLabel = p85p95Collapsed ? "85–95%" : "85%";
+  const subtext = `${pctLabel} of simulations done by this date · ${p85.weekLabel} out`;
 
   return (
     <Stack

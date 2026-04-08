@@ -6,7 +6,7 @@
  * and the presentation layer, keeping display logic out of components.
  */
 
-import { toCompletionDate } from "./dates";
+import { toCompletionDate, isSameWeek } from "./dates";
 import type { OddsByWeekPoint } from "./stats";
 
 export type TimelinePin = {
@@ -20,6 +20,7 @@ export type TimelinePositions = {
   p85: TimelinePin;
   p95: TimelinePin;
   slowest: TimelinePin;
+  p85p95Collapsed: boolean;
 };
 
 /**
@@ -43,6 +44,12 @@ export function getTimelinePositions(
   const p85Weeks = getPercentileWeeks(oddsByWeek, 0.85);
   const p95Weeks = getPercentileWeeks(oddsByWeek, 0.95);
 
+  const toDate = (weeks: number) => {
+    const d = new Date(`${startDate}T00:00:00`);
+    d.setDate(d.getDate() + weeks * 7);
+    return d;
+  };
+
   // Positions are rescaled so p50=left edge (0%) and slowest=right edge (100%).
   // This removes the 0–50% "risky" zone from the track entirely.
   return {
@@ -50,6 +57,7 @@ export function getTimelinePositions(
     p85: makePin(p85Weeks, 70, startDate),
     p95: makePin(p95Weeks, 90, startDate),
     slowest: makePin(slowestWeeks, 100, startDate),
+    p85p95Collapsed: isSameWeek(toDate(p85Weeks), toDate(p95Weeks)),
   };
 }
 
