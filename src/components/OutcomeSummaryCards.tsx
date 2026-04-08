@@ -31,8 +31,10 @@ function CommitCard({ p85, p95 }: { p85: PinSummary; p95: PinSummary }) {
       gap={4}
       style={{
         flex: 2,
+        background: "var(--mantine-color-dark-6)",
         borderLeft: "3px solid var(--mantine-color-green-6)",
-        paddingLeft: 12,
+        borderRadius: 8,
+        padding: 12,
       }}
     >
       <Text size="xs" fw={600} c="green.4">
