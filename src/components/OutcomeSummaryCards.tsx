@@ -25,7 +25,7 @@ export function OutcomeSummaryCards({ p85 }: Props) {
       <Text size="xs" fw={600} c="green.4">
         ★ commit to this
       </Text>
-      <Text fw={700} fz={28} lh={1.1}>
+      <Text fw={700} fz={44} lh={1.1}>
         {p85.date ?? "—"}
       </Text>
       <Text size="xs" c="dimmed">
