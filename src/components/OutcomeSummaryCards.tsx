@@ -22,7 +22,7 @@ export function OutcomeSummaryCards({ p85 }: Props) {
         padding: 12,
       }}
     >
-      <Text size="xs" fw={600} c="green.4">
+      <Text size="sm" fw={600} c="green.4">
         ★ 85% confidence date
       </Text>
       <Text fw={700} fz={44} lh={1.1}>
