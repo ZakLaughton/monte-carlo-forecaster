@@ -62,7 +62,7 @@ export function TimelineTrack({ positions }: Props) {
       </div>
 
       {/* Pins */}
-      <Pin pin={positions.p50} label="50% done" subLabel="by this date" muted left={pinLeft(positions.p50.positionPct)} />
+      <Pin pin={positions.p50} label="50% done" subLabel="by this date" muted dim left={pinLeft(positions.p50.positionPct)} />
       <Pin pin={positions.p85} label="85% done" subLabel="by this date" accent starOnDate left={pinLeft(positions.p85.positionPct)} />
       <Pin pin={positions.p95} label="95% done" subLabel="by this date" muted dim left={pinLeft(positions.p95.positionPct)} />
     </div>
