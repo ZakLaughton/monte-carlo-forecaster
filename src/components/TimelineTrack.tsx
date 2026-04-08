@@ -46,7 +46,7 @@ export function TimelineTrack({ positions }: Props) {
             left: 0,
             width: `${positions.p85.positionPct}%`,
             height: "100%",
-            background: "var(--mantine-color-yellow-6)",
+            background: "var(--mantine-color-green-3)",
           }}
         />
         {/* Green: p85 to p95 */}
