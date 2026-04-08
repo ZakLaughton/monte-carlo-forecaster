@@ -19,6 +19,17 @@ const DATA = [
 ];
 
 describe("DeliveryOddsTable", () => {
+  describe("85% row highlight", () => {
+    it("has a distinct background style on the 85% row", () => {
+      render(<DeliveryOddsTable data={DATA} />);
+      const row85 = screen.getByText("85%").closest("tr") as HTMLElement;
+      const row50 = screen.getByText("50%").closest("tr") as HTMLElement;
+
+      expect(row85.style.background).not.toBe("");
+      expect(row50.style.background).toBe("");
+    });
+  });
+
   describe("default (collapsed) state", () => {
     it("shows the default confidence rows", () => {
       render(<DeliveryOddsTable data={DATA} />);

@@ -74,7 +74,10 @@ export function DeliveryOddsTable({ data, startDate = "" }: Props) {
         </Table.Thead>
         <Table.Tbody>
           {percentiles.map((row) => (
-            <Table.Tr key={row.percentile}>
+            <Table.Tr
+              key={row.percentile}
+              style={row.percentile === "85%" ? { background: "color-mix(in srgb, var(--mantine-color-green-6) 8%, transparent)" } : undefined}
+            >
               <Table.Td ta="center">{row.percentile}</Table.Td>
               <Table.Td ta="center">
                 {row.weeks} {row.weeks === 1 ? "week" : "weeks"}
