@@ -74,8 +74,11 @@ export function DeliveryOddsTable({ data, startDate = "" }: Props) {
         </Table.Thead>
         <Table.Tbody>
           {percentiles.map((row) => (
-            <Table.Tr key={row.percentile}>
-              <Table.Td ta="center">{row.percentile}</Table.Td>
+            <Table.Tr
+              key={row.percentile}
+              style={row.percentile === "85%" ? { background: "color-mix(in srgb, var(--mantine-color-green-6) 8%, transparent)" } : undefined}
+            >
+              <Table.Td ta="center">{row.percentile}{row.percentile === "85%" ? " *" : ""}</Table.Td>
               <Table.Td ta="center">
                 {row.weeks} {row.weeks === 1 ? "week" : "weeks"}
                 {startDate && (
@@ -94,6 +97,11 @@ export function DeliveryOddsTable({ data, startDate = "" }: Props) {
       <Anchor component="button" size="xs" mt={4} c="dimmed" onClick={toggle}>
         {showFull ? "Show less" : "Show full distribution"}
       </Anchor>
+      {percentiles.length > 0 && (
+        <Text fz={11} c="dimmed" mt={6}>
+          * Most teams use 85% for external commitments.
+        </Text>
+      )}
     </>
   );
 }

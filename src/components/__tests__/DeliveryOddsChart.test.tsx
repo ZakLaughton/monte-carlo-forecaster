@@ -19,6 +19,39 @@ const DATA = [
 ];
 
 describe("DeliveryOddsTable", () => {
+  describe("85% row asterisk", () => {
+    it("renders '85% *' in the likelihood cell", () => {
+      render(<DeliveryOddsTable data={DATA} />);
+      expect(screen.getByText("85% *")).toBeInTheDocument();
+    });
+
+    it("does not add an asterisk to other rows", () => {
+      render(<DeliveryOddsTable data={DATA} />);
+      expect(screen.queryByText("50% *")).not.toBeInTheDocument();
+      expect(screen.queryByText("95% *")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("85% row highlight", () => {
+    it("has a distinct background style on the 85% row", () => {
+      render(<DeliveryOddsTable data={DATA} />);
+      const row85 = screen.getByText("85% *").closest("tr") as HTMLElement;
+      const row50 = screen.getByText("50%").closest("tr") as HTMLElement;
+
+      expect(row85.style.background).not.toBe("");
+      expect(row50.style.background).toBe("");
+    });
+  });
+
+  describe("footnote", () => {
+    it("renders the 85% footnote below the table", () => {
+      render(<DeliveryOddsTable data={DATA} />);
+      expect(
+        screen.getByText(/\* Most teams use 85% for external commitments\./i),
+      ).toBeInTheDocument();
+    });
+  });
+
   describe("default (collapsed) state", () => {
     it("shows the default confidence rows", () => {
       render(<DeliveryOddsTable data={DATA} />);

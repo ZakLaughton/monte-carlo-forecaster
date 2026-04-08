@@ -1,4 +1,14 @@
 /**
+ * Returns true if two dates are within 6 days of each other (inclusive).
+ * Used to determine whether the 85% and 95% forecast dates are close enough
+ * to treat as the same delivery window.
+ */
+export function isSameWeek(a: Date, b: Date): boolean {
+  const diffDays = Math.abs(a.getTime() - b.getTime()) / (1000 * 60 * 60 * 24);
+  return diffDays <= 6;
+}
+
+/**
  * Returns a formatted completion date given a start date and number of weeks.
  * @param startDate - ISO date string (YYYY-MM-DD)
  * @param weeks - Number of weeks to add

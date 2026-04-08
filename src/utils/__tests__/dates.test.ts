@@ -1,4 +1,4 @@
-import { toCompletionDate } from "../dates";
+import { toCompletionDate, isSameWeek } from "../dates";
 
 // Pin "today" so year comparisons in formatCompletionDate are deterministic
 // regardless of when the tests actually run.
@@ -10,6 +10,20 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.useRealTimers();
+});
+
+describe("isSameWeek", () => {
+  it("returns true for the same day", () => {
+    expect(isSameWeek(new Date(2026, 3, 7), new Date(2026, 3, 7))).toBe(true);
+  });
+
+  it("returns true for dates 6 days apart", () => {
+    expect(isSameWeek(new Date(2026, 3, 7), new Date(2026, 3, 13))).toBe(true);
+  });
+
+  it("returns false for dates 7 days apart", () => {
+    expect(isSameWeek(new Date(2026, 3, 7), new Date(2026, 3, 14))).toBe(false);
+  });
 });
 
 describe("toCompletionDate", () => {
