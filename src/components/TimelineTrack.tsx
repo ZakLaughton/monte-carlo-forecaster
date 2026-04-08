@@ -3,13 +3,18 @@ import type { TimelinePositions, TimelinePin } from "../utils/outcomes";
 // Horizontal inset so edge pin labels don't clip
 const INSET = 36;
 
-// Vertical layout constants (px)
-const DATE_HEIGHT = 15;
+// Vertical layout — all values in px, derived from a shared track center point
+const DATE_HEIGHT = 20;    // space above track for date text
 const TRACK_HEIGHT = 6;
 const TICK_HEIGHT = 16;
 const LABEL_HEIGHT = 14;
 const SUBLABEL_HEIGHT = 13;
-const CONTAINER_HEIGHT = DATE_HEIGHT + TRACK_HEIGHT + TICK_HEIGHT + LABEL_HEIGHT + SUBLABEL_HEIGHT + 4;
+
+const TRACK_CENTER = DATE_HEIGHT + TRACK_HEIGHT / 2;       // 23
+const TICK_TOP = TRACK_CENTER - TICK_HEIGHT / 2;            // 15 — tick extends equally above/below track
+const TICK_BOTTOM = TRACK_CENTER + TICK_HEIGHT / 2;         // 31
+const LABELS_TOP = TICK_BOTTOM + 3;                         // 34
+const CONTAINER_HEIGHT = LABELS_TOP + LABEL_HEIGHT + SUBLABEL_HEIGHT + 2; // 63
 
 function pinLeft(positionPct: number) {
   return `calc(${INSET}px + ${positionPct / 100} * (100% - ${INSET * 2}px))`;
@@ -82,32 +87,49 @@ function Pin({ pin, label, subLabel, left, faint, accent, starOnDate }: PinProps
       ? "var(--mantine-color-dark-2)"
       : "var(--mantine-color-gray-5)";
 
+  const center: React.CSSProperties = {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    display: "flex",
+    justifyContent: "center",
+    whiteSpace: "nowrap",
+  };
+
   return (
     <div
       data-pin
-      style={{
-        position: "absolute",
-        left,
-        top: 0,
-        transform: "translateX(-50%)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 2,
-      }}
+      style={{ position: "absolute", left, top: 0, transform: "translateX(-50%)" }}
     >
-      <span style={{ fontSize: 11, color, whiteSpace: "nowrap", lineHeight: `${DATE_HEIGHT}px` }}>
-        {pin.date}{starOnDate ? " ★" : ""}
-      </span>
-      <div style={{ width: 1, height: TICK_HEIGHT, background: color }} />
-      <span style={{ fontSize: 10, color, whiteSpace: "nowrap", fontWeight: accent ? 700 : 400 }}>
-        {label}
-      </span>
-      {subLabel && (
-        <span style={{ fontSize: 10, color, whiteSpace: "nowrap" }}>
-          {subLabel}
+      {/* Date — bottom-aligned above the tick */}
+      <div style={{ ...center, top: 0, height: TICK_TOP, alignItems: "flex-end" }}>
+        <span style={{ fontSize: 11, color }}>
+          {pin.date}{starOnDate ? " ★" : ""}
         </span>
-      )}
+      </div>
+
+      {/* Tick — centered on track bar */}
+      <div
+        style={{
+          position: "absolute",
+          top: TICK_TOP,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 1,
+          height: TICK_HEIGHT,
+          background: color,
+        }}
+      />
+
+      {/* Labels — top-aligned below the tick */}
+      <div style={{ ...center, top: LABELS_TOP, flexDirection: "column", alignItems: "center", gap: 1 }}>
+        <span style={{ fontSize: 10, color, fontWeight: accent ? 700 : 400 }}>
+          {label}
+        </span>
+        {subLabel && (
+          <span style={{ fontSize: 10, color }}>{subLabel}</span>
+        )}
+      </div>
     </div>
   );
 }
