@@ -2,6 +2,7 @@ import { Paper, Group, Stack, Text, Title } from "@mantine/core";
 import { toCompletionDate } from "../utils/dates";
 import { getTimelinePositions } from "../utils/outcomes";
 import { TimelineTrack } from "./TimelineTrack";
+import { OutcomeSummaryCards } from "./OutcomeSummaryCards";
 import type { OddsByWeekPoint } from "../utils/stats";
 
 type Props = {
@@ -113,6 +114,13 @@ export function KeyOutcomes({ data, startDate = "" }: Props) {
           />
         ))}
       </Group>
+      {timelinePositions && (
+        <OutcomeSummaryCards
+          p50={timelinePositions.p50}
+          p85={timelinePositions.p85}
+          p95={timelinePositions.p95}
+        />
+      )}
       {timelinePositions && <TimelineTrack positions={timelinePositions} />}
     </Paper>
   );
