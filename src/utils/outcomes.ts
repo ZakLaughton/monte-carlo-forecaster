@@ -16,7 +16,6 @@ export type TimelinePin = {
 };
 
 export type TimelinePositions = {
-  fastest: TimelinePin;
   p50: TimelinePin;
   p85: TimelinePin;
   p95: TimelinePin;
@@ -38,18 +37,18 @@ export function getTimelinePositions(
   oddsByWeek: OddsByWeekPoint[],
   startDate: string,
 ): TimelinePositions {
-  const fastestWeeks = oddsByWeek[0].weeks;
   const slowestWeeks = oddsByWeek[oddsByWeek.length - 1].weeks;
 
   const p50Weeks = getPercentileWeeks(oddsByWeek, 0.5);
   const p85Weeks = getPercentileWeeks(oddsByWeek, 0.85);
   const p95Weeks = getPercentileWeeks(oddsByWeek, 0.95);
 
+  // Positions are rescaled so p50=left edge (0%) and slowest=right edge (100%).
+  // This removes the 0–50% "risky" zone from the track entirely.
   return {
-    fastest: makePin(fastestWeeks, 0, startDate),
-    p50: makePin(p50Weeks, 50, startDate),
-    p85: makePin(p85Weeks, 85, startDate),
-    p95: makePin(p95Weeks, 95, startDate),
+    p50: makePin(p50Weeks, 0, startDate),
+    p85: makePin(p85Weeks, 70, startDate),
+    p95: makePin(p95Weeks, 90, startDate),
     slowest: makePin(slowestWeeks, 100, startDate),
   };
 }

@@ -16,23 +16,12 @@ export function TimelineTrack({ positions }: Props) {
           background: "var(--mantine-color-dark-4)",
         }}
       >
-        {/* Red: fastest to p50 */}
+        {/* Yellow: p50 (left edge) to p85 */}
         <div
           style={{
             position: "absolute",
             left: 0,
-            width: `${positions.p50.positionPct}%`,
-            height: "100%",
-            background: "var(--mantine-color-red-7)",
-            borderRadius: 3,
-          }}
-        />
-        {/* Yellow: p50 to p85 */}
-        <div
-          style={{
-            position: "absolute",
-            left: `${positions.p50.positionPct}%`,
-            width: `${positions.p85.positionPct - positions.p50.positionPct}%`,
+            width: `${positions.p85.positionPct}%`,
             height: "100%",
             background: "var(--mantine-color-yellow-6)",
           }}
@@ -50,7 +39,6 @@ export function TimelineTrack({ positions }: Props) {
       </div>
 
       {/* Pins */}
-      <Pin pin={positions.fastest} label="fastest" faint />
       <Pin pin={positions.p50} label="50%" muted />
       <Pin pin={positions.p85} label="★ 85%" accent />
       <Pin pin={positions.p95} label="95%" muted />

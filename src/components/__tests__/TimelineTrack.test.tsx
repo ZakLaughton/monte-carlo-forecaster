@@ -1,10 +1,9 @@
 /**
  * Tests for the TimelineTrack component.
  *
- * TimelineTrack renders a horizontal bar with pins at fastest, p50, p85,
- * p95, and slowest dates. Each pin shows a date above the line and a
- * plain-language label below. Pin positions are driven by positionPct
- * values from getTimelinePositions.
+ * TimelineTrack renders a horizontal bar with pins at p50, p85, p95, and
+ * slowest. The track starts at p50 (left edge) — the 0–50% zone is not shown.
+ * Pin positions are driven by positionPct values from getTimelinePositions.
  */
 
 import { render, screen } from "../../test-utils";
@@ -12,10 +11,9 @@ import { TimelineTrack } from "../TimelineTrack";
 import type { TimelinePositions } from "../../utils/outcomes";
 
 const POSITIONS: TimelinePositions = {
-  fastest: { date: "Apr 14", weekLabel: "1 week", positionPct: 0 },
-  p50: { date: "May 12", weekLabel: "5 weeks", positionPct: 33 },
-  p85: { date: "Jun 9", weekLabel: "9 weeks", positionPct: 67 },
-  p95: { date: "Jun 23", weekLabel: "11 weeks", positionPct: 83 },
+  p50: { date: "May 12", weekLabel: "5 weeks", positionPct: 0 },
+  p85: { date: "Jun 9", weekLabel: "9 weeks", positionPct: 70 },
+  p95: { date: "Jun 23", weekLabel: "11 weeks", positionPct: 90 },
   slowest: { date: "Jul 7", weekLabel: "13 weeks", positionPct: 100 },
 };
 
@@ -24,11 +22,15 @@ describe("TimelineTrack", () => {
     it("renders the below-pin label for each pin", () => {
       render(<TimelineTrack positions={POSITIONS} />);
 
-      expect(screen.getByText("fastest")).toBeInTheDocument();
       expect(screen.getByText("50%")).toBeInTheDocument();
       expect(screen.getByText("★ 85%")).toBeInTheDocument();
       expect(screen.getByText("95%")).toBeInTheDocument();
       expect(screen.getByText("slowest")).toBeInTheDocument();
+    });
+
+    it("does not render a fastest pin", () => {
+      render(<TimelineTrack positions={POSITIONS} />);
+      expect(screen.queryByText("fastest")).not.toBeInTheDocument();
     });
 
     it("renders a legend line explaining what the percentages mean", () => {
@@ -41,13 +43,11 @@ describe("TimelineTrack", () => {
     it("renders the date above each pin", () => {
       render(<TimelineTrack positions={POSITIONS} />);
 
-      expect(screen.getByText("Apr 14")).toBeInTheDocument();
       expect(screen.getByText("May 12")).toBeInTheDocument();
       expect(screen.getByText("Jun 9")).toBeInTheDocument();
       expect(screen.getByText("Jun 23")).toBeInTheDocument();
       expect(screen.getByText("Jul 7")).toBeInTheDocument();
     });
-
   });
 
   describe("pin positions", () => {
@@ -60,9 +60,8 @@ describe("TimelineTrack", () => {
       );
 
       expect(positions).toContain("0%");
-      expect(positions).toContain("33%");
-      expect(positions).toContain("67%");
-      expect(positions).toContain("83%");
+      expect(positions).toContain("70%");
+      expect(positions).toContain("90%");
       expect(positions).toContain("100%");
     });
   });
