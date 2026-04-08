@@ -69,7 +69,7 @@ export function DeliveryOddsTable({ data, startDate = "" }: Props) {
         <Table.Thead>
           <Table.Tr>
             <Table.Th ta="center">Likelihood</Table.Th>
-            <Table.Th ta="center">Finish by</Table.Th>
+            <Table.Th ta="center">Date</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -80,14 +80,16 @@ export function DeliveryOddsTable({ data, startDate = "" }: Props) {
             >
               <Table.Td ta="center">{row.percentile}{row.percentile === "85%" ? " *" : ""}</Table.Td>
               <Table.Td ta="center">
-                {row.weeks} {row.weeks === 1 ? "week" : "weeks"}
-                {startDate && (
+                {startDate ? (
                   <>
+                    {toCompletionDate(startDate, row.weeks) ?? ""}
                     <br />
                     <span style={{ color: "var(--mantine-color-dimmed)" }}>
-                      {toCompletionDate(startDate, row.weeks) ?? ""}
+                      {row.weeks} {row.weeks === 1 ? "week" : "weeks"} out
                     </span>
                   </>
+                ) : (
+                  <>{row.weeks} {row.weeks === 1 ? "week" : "weeks"}</>
                 )}
               </Table.Td>
             </Table.Tr>

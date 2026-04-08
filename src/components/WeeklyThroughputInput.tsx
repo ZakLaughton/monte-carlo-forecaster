@@ -61,7 +61,7 @@ export const WeeklyThroughputInput = ({ velocities, onChange }: Props) => {
         </Group>
         <Text size="xs" c="dimmed">
           Count completed work items (tickets, stories, tasks, etc.) from any
-          recent weeks — project history not required.
+          recent weeks.
         </Text>
       </div>
 
