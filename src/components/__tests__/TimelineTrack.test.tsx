@@ -25,10 +25,17 @@ describe("TimelineTrack", () => {
       render(<TimelineTrack positions={POSITIONS} />);
 
       expect(screen.getByText("fastest")).toBeInTheDocument();
-      expect(screen.getByText("50% done by this date")).toBeInTheDocument();
-      expect(screen.getByText("★ 85% done by this date")).toBeInTheDocument();
-      expect(screen.getByText("95% done by this date")).toBeInTheDocument();
+      expect(screen.getByText("50%")).toBeInTheDocument();
+      expect(screen.getByText("★ 85%")).toBeInTheDocument();
+      expect(screen.getByText("95%")).toBeInTheDocument();
       expect(screen.getByText("slowest")).toBeInTheDocument();
+    });
+
+    it("renders a legend line explaining what the percentages mean", () => {
+      render(<TimelineTrack positions={POSITIONS} />);
+      expect(
+        screen.getByText(/each % is both a simulation count and your confidence/i),
+      ).toBeInTheDocument();
     });
 
     it("renders the date above each pin", () => {

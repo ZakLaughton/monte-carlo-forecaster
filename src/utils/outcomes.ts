@@ -27,8 +27,12 @@ export type TimelinePositions = {
  * Converts oddsByWeek data into labeled timeline pins, each with a position
  * percentage for rendering along a horizontal track.
  *
- * Pin positions are calculated as:
- *   (pinWeeks - fastestWeeks) / (slowestWeeks - fastestWeeks) * 100
+ * Pin positions are percentile-based, not time-based, so the visual space
+ * directly maps to simulation count:
+ *   fastest=0, p50=50, p85=85, p95=95, slowest=100
+ *
+ * This prevents rare outlier dates (e.g. the slowest 1 in 10,000 simulation)
+ * from taking up disproportionate visual space on the track.
  */
 export function getTimelinePositions(
   oddsByWeek: OddsByWeekPoint[],
@@ -42,11 +46,11 @@ export function getTimelinePositions(
   const p95Weeks = getPercentileWeeks(oddsByWeek, 0.95);
 
   return {
-    fastest: makePin(fastestWeeks, fastestWeeks, slowestWeeks, startDate),
-    p50: makePin(p50Weeks, fastestWeeks, slowestWeeks, startDate),
-    p85: makePin(p85Weeks, fastestWeeks, slowestWeeks, startDate),
-    p95: makePin(p95Weeks, fastestWeeks, slowestWeeks, startDate),
-    slowest: makePin(slowestWeeks, fastestWeeks, slowestWeeks, startDate),
+    fastest: makePin(fastestWeeks, 0, startDate),
+    p50: makePin(p50Weeks, 50, startDate),
+    p85: makePin(p85Weeks, 85, startDate),
+    p95: makePin(p95Weeks, 95, startDate),
+    slowest: makePin(slowestWeeks, 100, startDate),
   };
 }
 
@@ -67,16 +71,7 @@ function getPercentileWeeks(
   return entry ? entry.weeks : oddsByWeek[oddsByWeek.length - 1].weeks;
 }
 
-function makePin(
-  weeks: number,
-  fastestWeeks: number,
-  slowestWeeks: number,
-  startDate: string,
-): TimelinePin {
-  const range = slowestWeeks - fastestWeeks;
-  const positionPct =
-    range === 0 ? 0 : ((weeks - fastestWeeks) / range) * 100;
-
+function makePin(weeks: number, positionPct: number, startDate: string): TimelinePin {
   return {
     date: toCompletionDate(startDate, weeks),
     weekLabel: `${weeks} ${weeks === 1 ? "week" : "weeks"}`,

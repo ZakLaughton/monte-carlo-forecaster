@@ -16,36 +16,58 @@ export function TimelineTrack({ positions }: Props) {
           background: "var(--mantine-color-dark-4)",
         }}
       >
-        {/* Light green: left edge to p50 */}
+        {/* Red: fastest to p50 */}
         <div
           style={{
             position: "absolute",
             left: 0,
             width: `${positions.p50.positionPct}%`,
             height: "100%",
-            background: "var(--mantine-color-green-9)",
+            background: "var(--mantine-color-red-7)",
             borderRadius: 3,
           }}
         />
-        {/* Dark green: p50 to p85 */}
+        {/* Yellow: p50 to p85 */}
         <div
           style={{
             position: "absolute",
             left: `${positions.p50.positionPct}%`,
             width: `${positions.p85.positionPct - positions.p50.positionPct}%`,
             height: "100%",
+            background: "var(--mantine-color-yellow-6)",
+          }}
+        />
+        {/* Green: p85 to p95 */}
+        <div
+          style={{
+            position: "absolute",
+            left: `${positions.p85.positionPct}%`,
+            width: `${positions.p95.positionPct - positions.p85.positionPct}%`,
+            height: "100%",
             background: "var(--mantine-color-green-6)",
-            borderRadius: 0,
           }}
         />
       </div>
 
       {/* Pins */}
       <Pin pin={positions.fastest} label="fastest" faint />
-      <Pin pin={positions.p50} label="50% done by this date" muted />
-      <Pin pin={positions.p85} label="★ 85% done by this date" accent />
-      <Pin pin={positions.p95} label="95% done by this date" muted />
+      <Pin pin={positions.p50} label="50%" muted />
+      <Pin pin={positions.p85} label="★ 85%" accent />
+      <Pin pin={positions.p95} label="95%" muted />
       <Pin pin={positions.slowest} label="slowest" faint />
+
+      {/* Legend */}
+      <p
+        style={{
+          marginTop: "1.5rem",
+          fontSize: 11,
+          fontStyle: "italic",
+          color: "var(--mantine-color-dark-2)",
+          textAlign: "center",
+        }}
+      >
+        Each % is both a simulation count and your confidence that the team delivers by that date.
+      </p>
     </div>
   );
 }

@@ -6,8 +6,11 @@
  *
  * getTimelinePositions: converts oddsByWeek + startDate into a set of labeled
  * pins (fastest, p50, p85, p95, slowest), each with a % position along the
- * horizontal timeline track and a formatted date. Also returns a `collapsed`
- * flag for when 85% and 95% land on the same week.
+ * horizontal timeline track and a formatted date.
+ *
+ * Pin positions are percentile-based (not time-based), so the visual space
+ * directly maps to simulation count:
+ *   fastest=0, p50=50, p85=85, p95=95, slowest=100
  */
 
 import { getTimelinePositions } from "../outcomes";
@@ -23,11 +26,6 @@ const NORMAL_ODDS: OddsByWeekPoint[] = [
   { weeks: 20, p: 1.0, count: 1000 },
 ];
 
-// all simulations complete in the same week — edge case for position math
-const SINGLE_WEEK_ODDS: OddsByWeekPoint[] = [
-  { weeks: 10, p: 1.0, count: 1000 },
-];
-
 const START_DATE = "2026-04-07";
 
 describe("getTimelinePositions", () => {
@@ -39,14 +37,10 @@ describe("getTimelinePositions", () => {
       expect(result.slowest.positionPct).toBe(100);
     });
 
-    it("computes correct position percentages for each pin", () => {
-      // range = 20 - 8 = 12
-      // p50 (10): (10-8)/12 * 100 = 16.67
-      // p85 (14): (14-8)/12 * 100 = 50
-      // p95 (16): (16-8)/12 * 100 = 66.67
-      expect(result.p50.positionPct).toBeCloseTo(16.67, 1);
-      expect(result.p85.positionPct).toBeCloseTo(50, 1);
-      expect(result.p95.positionPct).toBeCloseTo(66.67, 1);
+    it("positions pins at their percentile values, not time values", () => {
+      expect(result.p50.positionPct).toBe(50);
+      expect(result.p85.positionPct).toBe(85);
+      expect(result.p95.positionPct).toBe(95);
     });
 
     it("sets correct week labels", () => {
@@ -89,15 +83,4 @@ describe("getTimelinePositions", () => {
     });
   });
 
-  describe("edge case: fastest === slowest (all simulations same week)", () => {
-    const result = getTimelinePositions(SINGLE_WEEK_ODDS, START_DATE);
-
-    it("does not produce NaN positions", () => {
-      expect(result.fastest.positionPct).not.toBeNaN();
-      expect(result.slowest.positionPct).not.toBeNaN();
-      expect(result.p50.positionPct).not.toBeNaN();
-      expect(result.p85.positionPct).not.toBeNaN();
-      expect(result.p95.positionPct).not.toBeNaN();
-    });
-  });
 });
