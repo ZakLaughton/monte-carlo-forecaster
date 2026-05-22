@@ -52,7 +52,7 @@ const FAQ_ITEMS = [
     value: "confidence-percentages",
     question: "What do the confidence percentages mean?",
     answer:
-      "Each percentage is a threshold: \"85% confidence\" means the simulation predicts the team will finish by that date 85% of the time under similar conditions. Higher confidence = later date = safer commitment.",
+      "Each percentage is a threshold: \"85% confidence\" means the simulation predicts the team will finish by that date in 85% of scenarios. Higher confidence means a later date and a safer commitment. As a rule of thumb: 50% is useful for internal planning where you just need a likely midpoint. 85% is the right choice when making a commitment to someone outside the team — you'll hit that date in the vast majority of scenarios. 95% is for when slipping is genuinely costly.",
   },
   {
     value: "sharing",
