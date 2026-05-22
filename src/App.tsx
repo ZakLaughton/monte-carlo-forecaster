@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { Container, Title, Stack, Grid, Paper } from "@mantine/core";
+import { Container, Title, Stack, Grid, Paper, Anchor } from "@mantine/core";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { toOddsByWeek } from "./utils/stats";
@@ -7,11 +7,14 @@ import { ResultsPanel } from "./components/ResultsPanel";
 import { getTodayIsoDate } from "./hooks/useSimulationFormStorage";
 import { useAutoRunFromUrlParams } from "./hooks/useAutoRunFromUrlParams";
 import { buildShareParams } from "./utils/share-params";
+import { FaqModal } from "./components/FaqModal";
+import { useFaqModal } from "./hooks/useFaqModal";
 
 const MIN_RUNNING_MS = 400;
 const REVEAL_TRANSITION_MS = 200;
 
 function App() {
+  const faqModal = useFaqModal();
   const [simulationResults, setSimulationResults] = useState<number[]>([]);
   const [forecastStartDate, setForecastStartDate] = useState(() =>
     new Date().toISOString().slice(0, 10),
@@ -83,9 +86,15 @@ function App() {
   return (
     <Container size={960} py="md">
       <Stack gap="md">
-        <Title order={4} ta="center" fw={600} c="gray.3">
-          Delivery Forecast
-        </Title>
+        <Stack gap={4} align="center">
+          <Title order={4} fw={600} c="gray.3">
+            Delivery Forecast
+          </Title>
+          <Anchor size="xs" c="dimmed" onClick={faqModal.open}>
+            How does this work?
+          </Anchor>
+        </Stack>
+        <FaqModal opened={faqModal.opened} onClose={faqModal.close} />
         <Grid gutter="md" align="flex-start">
           <Grid.Col span={{ base: 12, md: 5 }}>
             <Paper p="md" withBorder radius="md">
