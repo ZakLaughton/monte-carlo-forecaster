@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { Container, Title, Stack, Grid, Paper, Anchor, Group } from "@mantine/core";
+import { Container, Title, Stack, Grid, Paper, Anchor } from "@mantine/core";
 import { SimulationForm } from "./components/SimulationForm";
 import { simulateDeliveryWeeks } from "./utils/monte-carlo";
 import { toOddsByWeek } from "./utils/stats";
@@ -86,14 +86,14 @@ function App() {
   return (
     <Container size={960} py="md">
       <Stack gap="md">
-        <Group justify="space-between" align="center">
+        <Stack gap={4} align="center">
           <Title order={4} fw={600} c="gray.3">
             Delivery Forecast
           </Title>
-          <Anchor size="sm" c="dimmed" onClick={faqModal.open}>
+          <Anchor size="xs" c="dimmed" onClick={faqModal.open}>
             How does this work?
           </Anchor>
-        </Group>
+        </Stack>
         <FaqModal opened={faqModal.opened} onClose={faqModal.close} />
         <Grid gutter="md" align="flex-start">
           <Grid.Col span={{ base: 12, md: 5 }}>
