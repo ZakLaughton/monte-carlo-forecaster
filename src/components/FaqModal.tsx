@@ -40,7 +40,7 @@ const FAQ_ITEMS = [
     value: "no-story-points",
     question: "Why doesn't this use story points?",
     answer:
-      "Story points are estimates, and estimates compound error. Throughput — how many items actually got done — is objective. Using real output avoids the \"how big is a point?\" debate and tends to produce more honest forecasts.",
+      "Story points abstract reality — they're a team's subjective read on complexity, not a measure of actual output. Using them here would create a double abstraction: a probabilistic model built on estimates, predicting estimates. Points also don't reliably predict how long work takes, since duration depends on factors like review cycles, dependencies, and unexpected blockers that complexity scores can't capture. Throughput — how many items actually finished each week — is objective history. That's what makes the simulation honest.",
   },
   {
     value: "how-many-weeks",
