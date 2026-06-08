@@ -70,6 +70,7 @@ export function FaqModal({ opened, onClose }: Props) {
       title="Frequently Asked Questions"
       size="lg"
       centered
+      closeButtonProps={{ "aria-label": "Close" }}
     >
       <Accordion variant="separated">
         {FAQ_ITEMS.map(({ value, question, answer }) => (

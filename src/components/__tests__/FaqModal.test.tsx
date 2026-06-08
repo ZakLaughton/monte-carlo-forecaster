@@ -18,7 +18,7 @@ describe("FaqModal", () => {
     const onClose = jest.fn();
     render(<FaqModal opened={true} onClose={onClose} />);
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button", { name: /close/i }));
 
     expect(onClose).toHaveBeenCalled();
   });
