@@ -107,9 +107,9 @@ describe("App", () => {
         jest.advanceTimersByTime(400);
       });
 
-      // p50=4wk, p85=5wk, p95=5wk — "4 weeks" also appears in DeliveryOddsTable
-      expect(screen.getAllByText("4 weeks").length).toBeGreaterThan(0);
-      expect(screen.getAllByText("5 weeks").length).toBeGreaterThan(0);
+      // p50=4wk, p85=5wk, p95=5wk — appear in DeliveryOddsTable as "N weeks out"
+      expect(screen.getAllByText(/4 weeks/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/5 weeks/i).length).toBeGreaterThan(0);
     });
 
     it("forecast stats are visible in the results panel after simulation completes", async () => {
