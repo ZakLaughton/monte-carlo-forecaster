@@ -24,8 +24,12 @@ afterEach(() => {
 // delay: null disables userEvent's internal pointer delays so they don't
 // conflict with fake timers
 async function fillAndSubmit(user: ReturnType<typeof userEvent.setup>) {
-  await user.type(screen.getByLabelText("Week 1"), "5");
-  await user.type(screen.getByLabelText("Remaining Work Items"), "10");
+  const week1 = screen.getByLabelText("Week 1");
+  await user.clear(week1);
+  await user.type(week1, "5");
+  const remaining = screen.getByLabelText("Remaining Work Items");
+  await user.clear(remaining);
+  await user.type(remaining, "10");
   await user.click(screen.getByRole("button", { name: /run simulation/i }));
 }
 
@@ -321,10 +325,15 @@ describe("App", () => {
       const user = userEvent.setup({ delay: null });
       const { unmount } = render(<App />);
 
+      // Clear before typing so we get predictable values despite sample data pre-fill.
       // Each keypress flushes the useEffect that writes to localStorage,
-      // so storage is up to date before we unmount
-      await user.type(screen.getByLabelText("Week 1"), "6");
-      await user.type(screen.getByLabelText("Remaining Work Items"), "20");
+      // so storage is up to date before we unmount.
+      const week1 = screen.getByLabelText("Week 1");
+      await user.clear(week1);
+      await user.type(week1, "6");
+      const remaining = screen.getByLabelText("Remaining Work Items");
+      await user.clear(remaining);
+      await user.type(remaining, "20");
 
       unmount();
       render(<App />);

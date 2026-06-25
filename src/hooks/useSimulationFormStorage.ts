@@ -25,6 +25,20 @@ export function getDefaultFormState(): SimulationFormState {
   };
 }
 
+export function getSampleFormState(): SimulationFormState {
+  return {
+    weeklyThroughput: [5, 4, 6, 5, 7],
+    projectSize: 30,
+    startDate: getTodayIsoDate(),
+  };
+}
+
+function isFormEmpty(state: SimulationFormState): boolean {
+  return (
+    state.weeklyThroughput.every((w) => w === null) && state.projectSize === null
+  );
+}
+
 function sanitizeState(
   parsed: Partial<SimulationFormState>,
 ): SimulationFormState {
@@ -48,9 +62,7 @@ function sanitizeState(
 }
 
 function loadInitialState(storageKey: string): SimulationFormState {
-  const fallback = getDefaultFormState();
-
-  if (typeof window === "undefined") return fallback;
+  if (typeof window === "undefined") return getSampleFormState();
 
   const shareParams = parseShareParams(window.location.search);
   if (shareParams) {
@@ -63,10 +75,12 @@ function loadInitialState(storageKey: string): SimulationFormState {
 
   try {
     const raw = window.localStorage.getItem(storageKey);
-    if (!raw) return fallback;
-    return sanitizeState(JSON.parse(raw) as Partial<SimulationFormState>);
+    if (!raw) return getSampleFormState();
+    const state = sanitizeState(JSON.parse(raw) as Partial<SimulationFormState>);
+    if (isFormEmpty(state)) return getSampleFormState();
+    return state;
   } catch {
-    return fallback;
+    return getSampleFormState();
   }
 }
 

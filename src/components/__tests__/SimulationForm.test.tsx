@@ -2,117 +2,105 @@ import { render, screen } from "../../test-utils";
 import { SimulationForm } from "../SimulationForm";
 import userEvent from "@testing-library/user-event";
 
-async function fillWeeklyThroughput(
-  user: ReturnType<typeof userEvent.setup>,
-  values: number[],
-) {
-  for (let i = 0; i < values.length; i++) {
-    if (i > 0) {
-      await user.click(screen.getByRole("button", { name: /add week/i }));
-    }
-    await user.type(screen.getByLabelText(`Week ${i + 1}`), String(values[i]));
-  }
-}
-
 beforeEach(() => {
   localStorage.clear();
 });
 
 describe("SimulationForm", () => {
   describe("confidence alerts", () => {
-    it("shows low confidence alert for 1 valid week", async () => {
-      const user = userEvent.setup();
-      render(
-        <SimulationForm
-          onRun={jest.fn()}
-          onReset={jest.fn()}
-          isRunning={false}
-        />,
+    it("shows low confidence alert for 1 valid week", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({ weeklyThroughput: [5], projectSize: null, startDate: "2026-01-01" }),
       );
-      await fillWeeklyThroughput(user, [5]);
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
       expect(screen.getByText(/low confidence/i)).toBeInTheDocument();
       expect(screen.getByText(/results can swing a lot/i)).toBeInTheDocument();
     });
 
-    it("shows low confidence alert for 2 valid weeks", async () => {
-      const user = userEvent.setup();
-      render(
-        <SimulationForm
-          onRun={jest.fn()}
-          onReset={jest.fn()}
-          isRunning={false}
-        />,
+    it("shows low confidence alert for 2 valid weeks", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({ weeklyThroughput: [5, 6], projectSize: null, startDate: "2026-01-01" }),
       );
-      await fillWeeklyThroughput(user, [5, 6]);
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
       expect(screen.getByText(/low confidence/i)).toBeInTheDocument();
       expect(screen.getByText(/results can swing a lot/i)).toBeInTheDocument();
     });
 
-    it("shows medium confidence alert for 3 valid weeks", async () => {
-      const user = userEvent.setup();
-      render(
-        <SimulationForm
-          onRun={jest.fn()}
-          onReset={jest.fn()}
-          isRunning={false}
-        />,
+    it("shows medium confidence alert for 3 valid weeks", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({ weeklyThroughput: [5, 6, 7], projectSize: null, startDate: "2026-01-01" }),
       );
-      await fillWeeklyThroughput(user, [5, 6, 7]);
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
       expect(screen.getByText(/medium confidence/i)).toBeInTheDocument();
       expect(screen.getByText(/3 weeks is workable/i)).toBeInTheDocument();
     });
   });
 
-  it("renders initial form state", () => {
+  it("renders form with sample data pre-populated by default", () => {
     render(
       <SimulationForm onRun={() => {}} onReset={() => {}} isRunning={false} />,
     );
     expect(screen.getByLabelText(/Remaining Work Items/i)).toBeInTheDocument();
+    // Sample data fills the form so the run button is immediately enabled
     expect(
       screen.getByRole("button", { name: /Run simulation/i }),
-    ).toBeDisabled();
+    ).not.toBeDisabled();
   });
 
   it("accepts user input for completed work items and remaining work", async () => {
+    // Pre-seed so Week 1 starts blank and remaining has a placeholder value
+    localStorage.setItem(
+      "delivery-forecaster-form",
+      JSON.stringify({ weeklyThroughput: [null], projectSize: 1, startDate: "2026-01-01" }),
+    );
     const user = userEvent.setup();
     render(
-      <SimulationForm
-        onRun={jest.fn()}
-        onReset={jest.fn()}
-        isRunning={false}
-      />,
+      <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
     );
 
-    await fillWeeklyThroughput(user, [4]);
     const weekInput = screen.getByLabelText("Week 1");
+    await user.type(weekInput, "4");
     expect(weekInput).toHaveValue("4");
 
     const remainingInput = screen.getByLabelText("Remaining Work Items");
+    await user.clear(remainingInput);
     await user.type(remainingInput, "15");
     expect(remainingInput).toHaveValue("15");
   });
 
   it("submits form and triggers simulation", async () => {
+    // Pre-seed with 1 blank week so submission args are predictable
+    localStorage.setItem(
+      "delivery-forecaster-form",
+      JSON.stringify({ weeklyThroughput: [null], projectSize: 1, startDate: "2026-01-01" }),
+    );
     const onRun = jest.fn();
     const user = userEvent.setup();
     render(
       <SimulationForm onRun={onRun} onReset={jest.fn()} isRunning={false} />,
     );
 
-    await fillWeeklyThroughput(user, [5]);
+    await user.type(screen.getByLabelText("Week 1"), "5");
 
     const remainingInput = screen.getByLabelText("Remaining Work Items");
+    await user.clear(remainingInput);
     await user.type(remainingInput, "10");
 
     const startDateInput = screen.getByLabelText("Forecast Start Date");
     await user.clear(startDateInput);
     await user.type(startDateInput, "2026-02-21");
 
-    // Submit the form
-    const runButton = screen.getByRole("button", { name: /Run simulation/i });
-    await user.click(runButton);
+    await user.click(screen.getByRole("button", { name: /Run simulation/i }));
 
-    // Assert that onRun was called with expected values
     expect(onRun).toHaveBeenCalledWith([5], 10, "2026-02-21");
   });
 
@@ -131,14 +119,11 @@ describe("SimulationForm", () => {
     it("disables run button and shows error for zero project size", async () => {
       const user = userEvent.setup();
       render(
-        <SimulationForm
-          onRun={jest.fn()}
-          onReset={jest.fn()}
-          isRunning={false}
-        />,
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
       );
 
       const remainingInput = screen.getByLabelText("Remaining Work Items");
+      await user.clear(remainingInput);
       await user.type(remainingInput, "0");
 
       const runButton = screen.getByRole("button", { name: /Run simulation/i });
@@ -154,16 +139,11 @@ describe("SimulationForm", () => {
     it("disables run button and shows error for empty project size", async () => {
       const user = userEvent.setup();
       render(
-        <SimulationForm
-          onRun={jest.fn()}
-          onReset={jest.fn()}
-          isRunning={false}
-        />,
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
       );
 
       const remainingInput = screen.getByLabelText("Remaining Work Items");
       await user.clear(remainingInput);
-      // Input is now empty
 
       const runButton = screen.getByRole("button", { name: /Run simulation/i });
       await user.click(runButton);
@@ -176,18 +156,15 @@ describe("SimulationForm", () => {
     });
 
     it("disables run button and shows error for missing weekly throughput", async () => {
+      // Pre-seed with a blank week but valid project size so the only problem is no valid week
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({ weeklyThroughput: [null], projectSize: 30, startDate: "2026-01-01" }),
+      );
       const user = userEvent.setup();
       render(
-        <SimulationForm
-          onRun={jest.fn()}
-          onReset={jest.fn()}
-          isRunning={false}
-        />,
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
       );
-
-      // Clear Week 1 input
-      const weekInput = screen.getByLabelText("Week 1");
-      await user.clear(weekInput);
 
       const runButton = screen.getByRole("button", { name: /Run simulation/i });
       await user.click(runButton);
@@ -251,15 +228,19 @@ describe("SimulationForm", () => {
       <SimulationForm onRun={jest.fn()} onReset={onReset} isRunning={false} />,
     );
 
-    await user.type(screen.getByLabelText("Week 1"), "5");
-    await user.type(screen.getByLabelText("Remaining Work Items"), "10");
+    const week1 = screen.getByLabelText("Week 1");
+    await user.clear(week1);
+    await user.type(week1, "5");
+    const remaining = screen.getByLabelText("Remaining Work Items");
+    await user.clear(remaining);
+    await user.type(remaining, "10");
 
     await user.click(screen.getByRole("button", { name: /reset/i }));
 
     // confirm returned false — form and callback should be untouched
     expect(onReset).not.toHaveBeenCalled();
-    expect(screen.getByLabelText("Week 1")).toHaveValue("5");
-    expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("10");
+    expect(week1).toHaveValue("5");
+    expect(remaining).toHaveValue("10");
   });
 
   describe("URL param pre-population", () => {
@@ -326,8 +307,59 @@ describe("SimulationForm", () => {
     });
   });
 
+  describe("default sample data population", () => {
+    it("populates form with sample data when no localStorage exists", () => {
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      expect(screen.getByLabelText("Week 1")).not.toHaveValue("");
+      expect(screen.getByLabelText("Remaining Work Items")).not.toHaveValue("");
+    });
+
+    it("populates form with sample data when localStorage has all-null values", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({ weeklyThroughput: [null], projectSize: null, startDate: "2026-01-01" }),
+      );
+
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      expect(screen.getByLabelText("Week 1")).not.toHaveValue("");
+      expect(screen.getByLabelText("Remaining Work Items")).not.toHaveValue("");
+    });
+
+    it("uses localStorage data when it has valid weeks even without project size", () => {
+      localStorage.setItem(
+        "delivery-forecaster-form",
+        JSON.stringify({ weeklyThroughput: [12, 8], projectSize: null, startDate: "2026-01-01" }),
+      );
+
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("12");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("");
+    });
+
+    it("clears to blank (not sample data) after reset", async () => {
+      jest.spyOn(window, "confirm").mockReturnValue(true);
+      const user = userEvent.setup();
+      render(
+        <SimulationForm onRun={jest.fn()} onReset={jest.fn()} isRunning={false} />,
+      );
+
+      await user.click(screen.getByRole("button", { name: /reset/i }));
+
+      expect(screen.getByLabelText("Week 1")).toHaveValue("");
+      expect(screen.getByLabelText("Remaining Work Items")).toHaveValue("");
+    });
+  });
+
   it("resets form and results when requested", async () => {
-    // Mock window.confirm to always return true
     jest.spyOn(window, "confirm").mockImplementation(() => true);
     const onRun = jest.fn();
     const onReset = jest.fn();
@@ -336,7 +368,8 @@ describe("SimulationForm", () => {
       <SimulationForm onRun={onRun} onReset={onReset} isRunning={false} />,
     );
 
-    // Fill out form
+    // Sample data is pre-populated; typing appends to existing values but
+    // all that matters is we can run and then reset to blank
     const weekInput = screen.getByLabelText("Week 1");
     await user.type(weekInput, "5");
     const remainingInput = screen.getByLabelText("Remaining Work Items");
@@ -345,25 +378,20 @@ describe("SimulationForm", () => {
     await user.clear(startDateInput);
     await user.type(startDateInput, "2026-02-21");
 
-    // Simulate run
     const runButton = screen.getByRole("button", { name: /Run simulation/i });
     await user.click(runButton);
     expect(onRun).toHaveBeenCalled();
 
-    // Simulate reset
     const resetButton = screen.getByRole("button", { name: /Reset/i });
     await user.click(resetButton);
     expect(onReset).toHaveBeenCalled();
 
-    // Form fields should be reset
     expect(weekInput).toHaveValue("");
     expect(remainingInput).toHaveValue("");
-    // The start date resets to the default (today)
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, "0");
     const dd = String(today.getDate()).padStart(2, "0");
-    const expectedDate = `${yyyy}-${mm}-${dd}`;
-    expect(startDateInput).toHaveValue(expectedDate);
+    expect(startDateInput).toHaveValue(`${yyyy}-${mm}-${dd}`);
   });
 });
